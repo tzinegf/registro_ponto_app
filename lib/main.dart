@@ -53,8 +53,9 @@ class MyApp extends StatelessWidget {
         ),
       ),
      // home: AdminPageAuth(),
-      //home: HomeScreen(),
       home: CadastroFuncScreen(),
+      //home: HomeScreen(),
+
     );
   }
 }
