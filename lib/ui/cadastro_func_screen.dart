@@ -1,3 +1,5 @@
+import 'package:controle_ponto_app/componentes/form-fields_widget.dart';
+import 'package:controle_ponto_app/componentes/text_field_widget.dart';
 import 'package:flutter/material.dart';
 
 class CadastroFuncScreen extends StatelessWidget {
@@ -8,219 +10,60 @@ class CadastroFuncScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text('Novo Funcionário'),
           centerTitle: true,
-          leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: (){
-            Navigator.pop(context);
-          }),
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
         ),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Container(height: 40,
+              Container(
+                height: 40,
                 color: Colors.blueGrey,
-                child: Center(child: Text("Informe os dados para cadatro",style: Theme.of(context).textTheme.headline6)),
+                child: Center(
+                    child: Text("Informe os dados para cadatro",
+                        style: Theme.of(context).textTheme.headline6)),
               ),
               Column(
                 children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                    margin: EdgeInsets.only(left: 10,right: 10,top: 20,bottom: 10),
-                    decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(color: Colors.grey),left: BorderSide(color: Colors.grey),right: BorderSide(color: Colors.grey),top: BorderSide(color: Colors.grey)),
-                      borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(padding: EdgeInsets.only(top: 5,bottom: 20),
-                      child:
-                      Text('Informações principais',style: Theme.of(context).textTheme.caption,textAlign: TextAlign.left)),
-                        Container(
-                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 5),
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              labelText: 'Nome:',
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 5),
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              labelText: 'CPF:',
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 5),
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              labelText: 'Cargo:',
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 5),
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              labelText: 'Matricula:',
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
+                  FormFieldsWidget(
+                    title: 'Informações principais',
+                    numberOfInputs: 4,
+                    child1: TextFieldWidget(labelText: 'Nome:'),
+                    child2: TextFieldWidget(labelText: 'CPF:'),
+                    child3: TextFieldWidget(labelText: 'Cargo:'),
+                    child4: TextFieldWidget(labelText: 'Matrícula'),
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                    margin: EdgeInsets.only(left: 10,right: 10,top: 10,bottom: 10),
-                    decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(color: Colors.grey),left: BorderSide(color: Colors.grey),right: BorderSide(color: Colors.grey),top: BorderSide(color: Colors.grey)),
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(padding: EdgeInsets.only(top: 5,bottom: 20),
-                            child:
-                            Text('Endereço',style: Theme.of(context).textTheme.caption,textAlign: TextAlign.left)),
-                        Container(
-                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 5),
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              labelText: 'Rua:',
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 5),
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              labelText: 'Bairro:',
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 5),
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              labelText: 'Cidade:',
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 5),
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              labelText: 'Estado:',
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
+                  FormFieldsWidget(
+                    title: 'Endereço',
+                    numberOfInputs: 4,
+                    child1: TextFieldWidget(labelText: 'Rua:'),
+                    child2: TextFieldWidget(labelText: 'Bairro:'),
+                    child3: TextFieldWidget(labelText: 'Cidade:'),
+                    child4: TextFieldWidget(labelText: 'Estado:'),
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                    margin: EdgeInsets.only(left: 10,right: 10,top: 10,bottom: 10),
-                    decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(color: Colors.grey),left: BorderSide(color: Colors.grey),right: BorderSide(color: Colors.grey),top: BorderSide(color: Colors.grey)),
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(padding: EdgeInsets.only(top: 5,bottom: 20),
-                            child:
-                            Text('Contato',style: Theme.of(context).textTheme.caption,textAlign: TextAlign.left)),
-                        Container(
-                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 5),
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              labelText: 'Telefone:',
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 5),
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              labelText: 'Telefone extra:',
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
+                  FormFieldsWidget(
+                    title: 'Contato',
+                    numberOfInputs: 2,
+                    child1: TextFieldWidget(labelText: 'Telefone:'),
+                    child2: TextFieldWidget(labelText: 'Telefone 2:'),
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                    margin: EdgeInsets.only(left: 10,right: 10,top: 10,bottom: 20),
-                    decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(color: Colors.grey),left: BorderSide(color: Colors.grey),right: BorderSide(color: Colors.grey),top: BorderSide(color: Colors.grey)),
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(padding: EdgeInsets.only(top: 5,bottom: 20),
-                            child:
-                            Text('Expediente de trabalho',style: Theme.of(context).textTheme.caption,textAlign: TextAlign.left)),
-                        Container(
-                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 5),
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              labelText: 'Horário inicial:',
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 5),
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              labelText: 'Inicio do intervalo:',
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 5),
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              labelText: 'Fim do intervalo:',
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 5),
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              labelText: 'Horário final:',
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
+                  FormFieldsWidget(
+                    title: 'Expediente de trabalho',
+                    numberOfInputs: 4,
+                    child1: TextFieldWidget(labelText: 'Horário inicial:'),
+                    child2: TextFieldWidget(labelText: 'Inicio do intervalo:'),
+                    child3: TextFieldWidget(labelText: 'Fim do intervalo:'),
+                    child4: TextFieldWidget(labelText: 'Horário final:'),
                   ),
-                  Padding(padding: EdgeInsets.only(bottom: 30,top: 20),child: TextButton(onPressed: (){}, child:Text('CADASTRAR') ))
-
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 30, top: 20),
+                      child: TextButton(
+                          onPressed: () {}, child: Text('CADASTRAR')))
                 ],
               ),
-
-
             ],
           ),
         ),
