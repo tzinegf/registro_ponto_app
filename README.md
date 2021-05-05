@@ -1,6 +1,6 @@
 # controle_ponto_app
 
-Controle de ponto eletrônico
+Aplicativo para controle de ponto eletrônico
 
 ## Getting Started
 
