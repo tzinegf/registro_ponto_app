@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
-
-class CadastroFuncScreen extends StatelessWidget {
+class EditFuncScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Novo Funcionário'),
+          title: Text('Funcionário'),
           centerTitle: true,
           leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: (){
             Navigator.pop(context);
           }),
+          actions: [
+            IconButton(icon: Icon(Icons.edit),
+            onPressed: (){
+
+            },
+            )
+          ],
         ),
         body: SingleChildScrollView(
           child: Column(
             children: [
               Container(height: 40,
                 color: Colors.blueGrey,
-                child: Center(child: Text("Informe os dados para cadatro",style: Theme.of(context).textTheme.headline6)),
+                child: Center(child: Text("Dados do funcionário selecionado",style: Theme.of(context).textTheme.headline6)),
               ),
               Column(
                 children: [
@@ -25,15 +31,39 @@ class CadastroFuncScreen extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
                     margin: EdgeInsets.only(left: 10,right: 10,top: 20,bottom: 10),
                     decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(color: Colors.grey),left: BorderSide(color: Colors.grey),right: BorderSide(color: Colors.grey),top: BorderSide(color: Colors.grey)),
-                      borderRadius: BorderRadius.circular(10)
+                        border: Border(bottom: BorderSide(color: Colors.grey),left: BorderSide(color: Colors.grey),right: BorderSide(color: Colors.grey),top: BorderSide(color: Colors.grey)),
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: Column(
+                      children: [
+
+                        Container(
+                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 5),
+                          child:  Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                        Text('Status:',style:Theme.of(context).textTheme.headline4),
+                        Text('ATIVO',style:Theme.of(context).textTheme.subtitle2)
+                      ],
+                    )
+                        ),
+                      ],
+                    ),
+
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                    margin: EdgeInsets.only(left: 10,right: 10,top: 20,bottom: 10),
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Colors.grey),left: BorderSide(color: Colors.grey),right: BorderSide(color: Colors.grey),top: BorderSide(color: Colors.grey)),
+                        borderRadius: BorderRadius.circular(10)
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(padding: EdgeInsets.only(top: 5,bottom: 20),
-                      child:
-                      Text('Informações principais',style: Theme.of(context).textTheme.caption,textAlign: TextAlign.left)),
+                            child:
+                            Text('Informações principais',style: Theme.of(context).textTheme.caption,textAlign: TextAlign.left)),
                         Container(
                           margin: EdgeInsets.only(left: 20,right: 20,bottom: 5),
                           child: TextField(
@@ -215,7 +245,12 @@ class CadastroFuncScreen extends StatelessWidget {
                     ),
 
                   ),
-                  Padding(padding: EdgeInsets.only(bottom: 30,top: 20),child: TextButton(onPressed: (){}, child:Text('CADASTRAR') ))
+                  Visibility(
+
+                    child: Padding(padding: EdgeInsets.only(bottom: 30,top: 20),child: TextButton(onPressed: (){}, child:Text('CADASTRAR') )),
+                  visible: false,
+                  )
+
 
                 ],
               ),

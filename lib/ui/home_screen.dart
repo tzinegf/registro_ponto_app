@@ -1,23 +1,36 @@
 import 'package:controle_ponto_app/ui/cadastro_func_screen.dart';
+import 'package:controle_ponto_app/ui/users_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import 'package:slide_digital_clock/slide_digital_clock.dart';
 
 
 
 class HomeScreen extends StatefulWidget {
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+//TODO
+//implementar leitura do código
 
-
+String teste='';
 
 final DateTime data = DateTime.now();
 
-  Widget _newDialog(){
+      String newText(String teste){
+        setState(() {
+          teste;
+        });
+
+      }
+
+
+  Widget _newDialog(String teste){
     showDialog(context: context, builder:(BuildContext context){
       return Dialog(
         child: Container(
@@ -36,8 +49,11 @@ final DateTime data = DateTime.now();
                   splashColor: Colors.blue,
                   color: Colors.blue,
                   iconSize: 100,
+                  onPressed: ()async{
+                    teste = await FlutterBarcodeScanner.scanBarcode('#ff6666','teste',true,ScanMode.DEFAULT);
+                    Navigator.pop(context,teste);
 
-                  onPressed: (){}),
+                  }),
               Padding(padding: EdgeInsets.only(bottom: 50),
               child: Text('LEITURA VIA CÓDIGO DE BARRAS',style: Theme.of(context).textTheme.headline4)),
               GestureDetector(
@@ -102,6 +118,7 @@ final DateTime data = DateTime.now();
           color: Colors.blueGrey,
             child: Center(child: Text(DateFormat("EEEE d 'de' MMMM 'de' y","pt_BR").format(data),style: Theme.of(context).textTheme.headline6)),
           ),
+          Text(teste,style: TextStyle(fontSize: 50),),
           Expanded(
             child: Center(
               child: Container(
@@ -128,7 +145,7 @@ final DateTime data = DateTime.now();
         tooltip: 'Registrar Ponto',
         child: Icon(Icons.add,size: 50,),
         onPressed: (){
-          _newDialog();
+          _newDialog(teste);
         },
       ),
       drawer: Drawer(
@@ -154,6 +171,7 @@ final DateTime data = DateTime.now();
               ListTile(
                 title: Text('Novo Funcionário',style: TextStyle(fontSize: 20,color: Colors.white),textAlign: TextAlign.center),
                 onTap: () {
+                  Navigator.pop(context);
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>CadastroFuncScreen()));
                 },
               ),
@@ -161,7 +179,8 @@ final DateTime data = DateTime.now();
 
                 title: Text('Funcionários Cadastrados',style: TextStyle(fontSize: 20,color: Colors.white),textAlign: TextAlign.center),
                 onTap: () {
-                  // Update the state of the app.
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>UsersScreen()));
                   // ...
                 },
               ),
