@@ -52,8 +52,8 @@ class MyApp extends StatelessWidget {
 
         ),
       ),
-     // home: AdminPageAuth(),
-      home: CadastroFuncScreen(),
+      home: AdminPageAuth(),
+      //home: CadastroFuncScreen(),
       //home: HomeScreen(),
 
     );

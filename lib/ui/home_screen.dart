@@ -1,3 +1,4 @@
+import 'package:controle_ponto_app/ui/cadastro_func_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -115,7 +116,7 @@ final DateTime data = DateTime.now();
                   ),
                   hourMinuteDigitTextStyle: TextStyle(
                     color: Colors.blueGrey,
-                    fontSize: 100,
+                    fontSize: 90,
                   ),
                   amPmDigitTextStyle: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold),
                 ),),
@@ -153,7 +154,7 @@ final DateTime data = DateTime.now();
               ListTile(
                 title: Text('Novo Funcionário',style: TextStyle(fontSize: 20,color: Colors.white),textAlign: TextAlign.center),
                 onTap: () {
-                 _newDialog();
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CadastroFuncScreen()));
                 },
               ),
               ListTile(
