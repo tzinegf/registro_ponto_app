@@ -1,5 +1,5 @@
-import 'package:controle_ponto_app/componentes/form-fields_widget.dart';
-import 'package:controle_ponto_app/componentes/text_field_widget.dart';
+import 'package:controle_ponto_app/components/form-fields_widget.dart';
+import 'package:controle_ponto_app/components/text_field_widget.dart';
 import 'package:flutter/material.dart';
 
 class CadastroFuncScreen extends StatelessWidget {
@@ -61,7 +61,11 @@ class CadastroFuncScreen extends StatelessWidget {
                   Padding(
                       padding: EdgeInsets.only(bottom: 30, top: 20),
                       child: TextButton(
-                          onPressed: () {}, child: Text('CADASTRAR')))
+                          onPressed: () {
+
+                            //TODO implementar salvamento de usuarios
+
+                          }, child: Text('CADASTRAR')))
                 ],
               ),
             ],

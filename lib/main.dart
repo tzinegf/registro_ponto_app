@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
@@ -48,14 +49,11 @@ class MyApp extends StatelessWidget {
             headline2: TextStyle(fontSize: 20.0),
             headline3: TextStyle(fontSize: 20.0, color: Colors.white),
             headline4: TextStyle(fontSize: 15.0),
-            headline5: TextStyle(
-                fontSize: 12.0, fontStyle: FontStyle.italic, color: Colors.red),
+            headline5: TextStyle(fontSize: 12.0, fontStyle: FontStyle.italic, color: Colors.red),
             headline6: TextStyle(fontSize: 12.0, color: Colors.white),
             caption: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-            subtitle2: TextStyle(
-                fontSize: 15.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue),
+            subtitle2: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.blue),
+            bodyText1: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.red),
           ),
         ),
         home: FutureBuilder(

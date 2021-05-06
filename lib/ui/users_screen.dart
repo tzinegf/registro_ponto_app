@@ -1,7 +1,26 @@
+import 'package:controle_ponto_app/components/card_widget.dart';
+import 'package:controle_ponto_app/models/user_model.dart';
+import 'package:controle_ponto_app/providers/db_provider.dart';
 import 'package:controle_ponto_app/ui/edit_func_screen.dart';
 import 'package:flutter/material.dart';
 
-class UsersScreen extends StatelessWidget {
+class UsersScreen extends StatefulWidget {
+
+  @override
+  _UsersScreenState createState() => _UsersScreenState();
+}
+
+class _UsersScreenState extends State<UsersScreen> {
+  Future <List<User>> allUsers ;
+
+  @override
+   void initState() {
+    // TODO: implement initState
+    super.initState();
+    allUsers = DbProvider().getAllUsers();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,59 +43,52 @@ class UsersScreen extends StatelessWidget {
                   child: Text("Funcionários cadastrados: 1",
                       style: Theme.of(context).textTheme.headline6)),
             ),
-            Column(
-              children: [
-                GestureDetector(
-                  child: Card(
-                    child: Container(
-                      height: 90,
-                      margin: EdgeInsets.all(10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Funcionário/a:',
-                                  style: Theme.of(context).textTheme.headline4),
-                              Text('Maria Josefina da costa',
-                                  style: Theme.of(context).textTheme.headline4)
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Data do cadastro',
-                                  style: Theme.of(context).textTheme.headline4),
-                              Text('04/05/2021',
-                                  style: Theme.of(context).textTheme.headline4)
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Status',
-                                  style: Theme.of(context).textTheme.headline4),
-                              Text('ATIVO',
-                                  style: Theme.of(context).textTheme.subtitle2)
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EditFuncScreen()));
-                  },
-                )
-              ],
-            ),
+            Container(
+              height: 500,
+              child: projecCardtWidget()
+            )
+
           ],
         ),
       ),
     );
+  }
+
+  Widget projecCardtWidget() {
+
+    return FutureBuilder(
+      future: this.allUsers,
+
+      builder: (context,snapshot){
+        if(!snapshot.hasData ){
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }else if(snapshot.hasError){
+         return Center(
+           child:Text('Error: ${snapshot.error}' ),
+         );
+        }else{
+          return  ListView.builder(
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, index) {
+              var item =snapshot.data[index];
+              return Column(
+                children: <Widget>[
+                  GestureDetector(child: CardWidget(nome: item.nome,status: item.ativo),
+                    onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>EditFuncScreen(user: item,)));
+                    },
+                  )
+                ],
+              );
+            },
+          );
+        }
+
+      },
+    );
+
+
   }
 }

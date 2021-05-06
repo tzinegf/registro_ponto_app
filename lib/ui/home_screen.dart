@@ -1,7 +1,10 @@
-import 'package:controle_ponto_app/componentes/dialog_widget.dart';
+import 'package:controle_ponto_app/providers/db_provider.dart';
 import 'package:controle_ponto_app/ui/cadastro_func_screen.dart';
+import 'package:controle_ponto_app/ui/reports_secreen.dart';
 import 'package:controle_ponto_app/ui/users_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,15 +18,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final userAuthController = TextEditingController();
+  final codeBarManual = TextEditingController();
 
   getValuesSF() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String stringValue = prefs.getString('password');
     return stringValue;
   }
-
-//TODO
-//implementar leitura do código
 
   String newcode = '';
 
@@ -57,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
                        String code = await FlutterBarcodeScanner.scanBarcode(
                             '#ff6666', 'teste', true, ScanMode.DEFAULT);
                         Navigator.pop(context, code);
+                        //TODO implemetar salvamento do registro de ponto atravez do numero da matrícula
                          setState(() {
                            newcode =code;
                          });
@@ -105,7 +107,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.only(
                         top: 20, right: 20, left: 20, bottom: 20),
                     child: TextField(
+                      controller: codeBarManual,
                       keyboardType: TextInputType.number,
+                      //maxLength: 10,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       maxLength: 10,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
@@ -118,7 +123,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: EdgeInsets.only(bottom: 20),
                       child: Text('INFORME O CÓDIGO',
                           style: Theme.of(context).textTheme.headline4)),
-                  TextButton(onPressed: () {}, child: Text('REGISTRAR'))
+                  TextButton(onPressed: () {
+                    print(codeBarManual.text);
+                    codeBarManual.clear();
+                    Navigator.pop(context);
+
+                    //TODO implemetar salvamento do registro de ponto atravez do numero da matrícula
+
+
+                  }, child: Text('REGISTRAR'))
                 ],
               ),
             ),
@@ -175,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       }else if(n==2){
                         Navigator.push(context, MaterialPageRoute(builder: (context) => UsersScreen()));
                        }else if(n==3){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => UsersScreen()));}
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ReportsScreen()));}
                     }else{
           showDialog(
           context: context,
@@ -242,6 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
           size: 50,
         ),
         onPressed: () {
+          DbProvider().getAllUsers();
           _newDialog();
         },
       ),

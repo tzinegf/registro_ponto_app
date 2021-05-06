@@ -1,4 +1,4 @@
-import 'package:controle_ponto_app/componentes/text_field_widget.dart';
+import 'package:controle_ponto_app/components/text_field_widget.dart';
 import 'package:flutter/material.dart';
 
 class FormFieldsWidget extends StatelessWidget {
