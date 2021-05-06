@@ -57,6 +57,9 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
     bairrocontroller.text = widget.user.bairro;
     fimalmococontroller.text = widget.user.horaFimAlmoco;
 
+    GlobalKey<FormState> _key = new GlobalKey();
+    bool _validate = false;
+
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
@@ -94,132 +97,136 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                     child: Text("Dados do funcionário selecionado",
                         style: Theme.of(context).textTheme.headline6)),
               ),
-              Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    margin: EdgeInsets.only(
-                        left: 10, right: 10, top: 20, bottom: 10),
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(color: Colors.grey),
-                            left: BorderSide(color: Colors.grey),
-                            right: BorderSide(color: Colors.grey),
-                            top: BorderSide(color: Colors.grey)),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      children: [
-                        Container(
-                            margin:
-                                EdgeInsets.only(left: 20, right: 20, bottom: 5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Status:',
-                                    style:
-                                        Theme.of(context).textTheme.headline4),
-                                Text(widget.user.ativo ? 'ATIVO' : 'DESATIVADO',
-                                    style: widget.user.ativo
-                                        ? Theme.of(context).textTheme.subtitle2
-                                        : Theme.of(context)
-                                            .textTheme
-                                            .bodyText1),
-                                Visibility(
-                                    visible: active,
-                                    child: Switch(
-                                      value: this.widget.user.ativo,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          this.widget.user.ativo = value;
-                                        });
-                                      },
-                                      activeTrackColor: Colors.blueAccent,
-                                      activeColor: Colors.white,
-                                      inactiveTrackColor: Colors.red,
-                                      inactiveThumbColor: Colors.white,
-                                    ))
-                              ],
-                            )),
-                      ],
+              Form(
+                key: _key,
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      margin: EdgeInsets.only(
+                          left: 10, right: 10, top: 20, bottom: 10),
+                      decoration: BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(color: Colors.grey),
+                              left: BorderSide(color: Colors.grey),
+                              right: BorderSide(color: Colors.grey),
+                              top: BorderSide(color: Colors.grey)),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Column(
+                        children: [
+                          Container(
+                              margin:
+                                  EdgeInsets.only(left: 20, right: 20, bottom: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Status:',
+                                      style:
+                                          Theme.of(context).textTheme.headline4),
+                                  Text(widget.user.ativo ? 'ATIVO' : 'DESATIVADO',
+                                      style: widget.user.ativo
+                                          ? Theme.of(context).textTheme.subtitle2
+                                          : Theme.of(context)
+                                              .textTheme
+                                              .bodyText1),
+                                  Visibility(
+                                      visible: active,
+                                      child: Switch(
+                                        value: this.widget.user.ativo,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            this.widget.user.ativo = value;
+                                          });
+                                        },
+                                        activeTrackColor: Colors.blueAccent,
+                                        activeColor: Colors.white,
+                                        inactiveTrackColor: Colors.red,
+                                        inactiveThumbColor: Colors.white,
+                                      ))
+                                ],
+                              )),
+                        ],
+                      ),
                     ),
-                  ),
-                  FormFieldsWidget(
-                    title: 'Informações principais',
-                    numberOfInputs: 4,
-                    child1: TextFieldWidget(
-                      labelText: 'Nome:',
-                      active: active,
-                      textController: nomecontroller,
+                    FormFieldsWidget(
+                      title: 'Informações principais',
+                      numberOfInputs: 4,
+                      child1: TextFieldWidget(
+
+                        labelText: 'Nome:',
+                        active: active,
+                        textController: nomecontroller,
+                      ),
+                      child2: TextFieldWidget(
+                          labelText: 'CPF:',
+                          active: active,
+                          textController: cpfcontroller),
+                      child3: TextFieldWidget(
+                          labelText: 'Cargo:',
+                          active: active,
+                          textController: cargocontroller),
+                      child4: TextFieldWidget(
+                          labelText: 'Matrícula',
+                          active: active,
+                          textController: matriculacontroller),
                     ),
-                    child2: TextFieldWidget(
-                        labelText: 'CPF:',
-                        active: active,
-                        textController: cpfcontroller),
-                    child3: TextFieldWidget(
-                        labelText: 'Cargo:',
-                        active: active,
-                        textController: cargocontroller),
-                    child4: TextFieldWidget(
-                        labelText: 'Matrícula',
-                        active: active,
-                        textController: matriculacontroller),
-                  ),
-                  FormFieldsWidget(
-                    title: 'Endereço',
-                    numberOfInputs: 3,
-                    child1: TextFieldWidget(
-                        labelText: 'Rua:',
-                        active: active,
-                        textController: ruacontroller),
-                    child2: TextFieldWidget(
-                        labelText: 'Bairro:',
-                        active: active,
-                        textController: bairrocontroller),
-                    child3: TextFieldWidget(
-                        labelText: 'Cidade:',
-                        active: active,
-                        textController: cidadecontroller),
-                  ),
-                  FormFieldsWidget(
-                    title: 'Contato',
-                    numberOfInputs: 2,
-                    child1: TextFieldWidget(
-                        labelText: 'Telefone:',
-                        active: active,
-                        textController: telefone1controller),
-                    child2: TextFieldWidget(
-                        labelText: 'Telefone 2:',
-                        active: active,
-                        textController: telefone2controller),
-                  ),
-                  FormFieldsWidget(
-                    title: 'Expediente de trabalho',
-                    numberOfInputs: 4,
-                    child1: TextFieldWidget(
-                        labelText: 'Horário inicial:',
-                        active: active,
-                        textController: inieoexpdcontroller),
-                    child2: TextFieldWidget(
-                        labelText: 'Inicio do intervalo:',
-                        active: active,
-                        textController: inialmococontroller),
-                    child3: TextFieldWidget(
-                        labelText: 'Fim do intervalo:',
-                        active: active,
-                        textController: fimalmococontroller),
-                    child4: TextFieldWidget(
-                        labelText: 'Horário final:',
-                        active: active,
-                        textController: fimexpedcontroller),
-                  ),
-                  Visibility(
-                    child: Padding(
-                        padding: EdgeInsets.only(bottom: 30, top: 20),
-                        child: TextButton(
-                            onPressed: () {}, child: Text('SALVAR'))),
-                    visible: active,
-                  )
-                ],
+                    FormFieldsWidget(
+                      title: 'Endereço',
+                      numberOfInputs: 3,
+                      child1: TextFieldWidget(
+                          labelText: 'Rua:',
+                          active: active,
+                          textController: ruacontroller),
+                      child2: TextFieldWidget(
+                          labelText: 'Bairro:',
+                          active: active,
+                          textController: bairrocontroller),
+                      child3: TextFieldWidget(
+                          labelText: 'Cidade:',
+                          active: active,
+                          textController: cidadecontroller),
+                    ),
+                    FormFieldsWidget(
+                      title: 'Contato',
+                      numberOfInputs: 2,
+                      child1: TextFieldWidget(
+                          labelText: 'Telefone:',
+                          active: active,
+                          textController: telefone1controller),
+                      child2: TextFieldWidget(
+                          labelText: 'Telefone 2:',
+                          active: active,
+                          textController: telefone2controller),
+                    ),
+                    FormFieldsWidget(
+                      title: 'Expediente de trabalho',
+                      numberOfInputs: 4,
+                      child1: TextFieldWidget(
+                          labelText: 'Horário inicial:',
+                          active: active,
+                          textController: inieoexpdcontroller),
+                      child2: TextFieldWidget(
+                          labelText: 'Inicio do intervalo:',
+                          active: active,
+                          textController: inialmococontroller),
+                      child3: TextFieldWidget(
+                          labelText: 'Fim do intervalo:',
+                          active: active,
+                          textController: fimalmococontroller),
+                      child4: TextFieldWidget(
+                          labelText: 'Horário final:',
+                          active: active,
+                          textController: fimexpedcontroller),
+                    ),
+                    Visibility(
+                      child: Padding(
+                          padding: EdgeInsets.only(bottom: 30, top: 20),
+                          child: TextButton(
+                              onPressed: () {}, child: Text('SALVAR'))),
+                      visible: active,
+                    )
+                  ],
+                ),
               ),
             ],
           ),

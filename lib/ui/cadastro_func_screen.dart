@@ -1,8 +1,28 @@
 import 'package:controle_ponto_app/components/form-fields_widget.dart';
 import 'package:controle_ponto_app/components/text_field_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 
-class CadastroFuncScreen extends StatelessWidget {
+// ignore: must_be_immutable
+class CadastroFuncScreen extends StatefulWidget {
+  @override
+  _CadastroFuncScreenState createState() => _CadastroFuncScreenState();
+}
+
+class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
+  var cpfMask = new MaskedTextController(mask: '000.000.000-00');
+
+  var phoneMask = new MaskedTextController(mask: '(000) 00000-0000');
+
+  var phoneMask2 = new MaskedTextController(mask: '(000) 00000-0000');
+
+  GlobalKey<FormState> _key = new GlobalKey();
+
+  String _horarioInicial;
+  String _fimIntervalo;
+  String _inicioIntervalo;
+  String _horarioFinal;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -26,47 +46,257 @@ class CadastroFuncScreen extends StatelessWidget {
                     child: Text("Informe os dados para cadatro",
                         style: Theme.of(context).textTheme.headline6)),
               ),
-              Column(
-                children: [
-                  FormFieldsWidget(
-                    title: 'Informações principais',
-                    numberOfInputs: 4,
-                    child1: TextFieldWidget(labelText: 'Nome:'),
-                    child2: TextFieldWidget(labelText: 'CPF:'),
-                    child3: TextFieldWidget(labelText: 'Cargo:'),
-                    child4: TextFieldWidget(labelText: 'Matrícula'),
-                  ),
-                  FormFieldsWidget(
-                    title: 'Endereço',
-                    numberOfInputs: 4,
-                    child1: TextFieldWidget(labelText: 'Rua:'),
-                    child2: TextFieldWidget(labelText: 'Bairro:'),
-                    child3: TextFieldWidget(labelText: 'Cidade:'),
-                    child4: TextFieldWidget(labelText: 'Estado:'),
-                  ),
-                  FormFieldsWidget(
-                    title: 'Contato',
-                    numberOfInputs: 2,
-                    child1: TextFieldWidget(labelText: 'Telefone:'),
-                    child2: TextFieldWidget(labelText: 'Telefone 2:'),
-                  ),
-                  FormFieldsWidget(
-                    title: 'Expediente de trabalho',
-                    numberOfInputs: 4,
-                    child1: TextFieldWidget(labelText: 'Horário inicial:'),
-                    child2: TextFieldWidget(labelText: 'Inicio do intervalo:'),
-                    child3: TextFieldWidget(labelText: 'Fim do intervalo:'),
-                    child4: TextFieldWidget(labelText: 'Horário final:'),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.only(bottom: 30, top: 20),
-                      child: TextButton(
-                          onPressed: () {
-
-                            //TODO implementar salvamento de usuarios
-
-                          }, child: Text('CADASTRAR')))
-                ],
+              Form(
+                key: _key,
+                child: Column(
+                  children: [
+                    FormFieldsWidget(
+                      title: 'Informações principais',
+                      numberOfInputs: 4,
+                      activeDropDown: true,
+                      child1: TextFieldWidget(labelText: 'Nome:'),
+                      child2: TextFieldWidget(
+                        labelText: 'CPF:',
+                        keyboardType: TextInputType.number,
+                        textController: cpfMask,
+                      ),
+                      child3: TextFieldWidget(labelText: 'Cargo:'),
+                      child4: TextFieldWidget(labelText: 'Matrícula'),
+                    ),
+                    FormFieldsWidget(
+                      title: 'Endereço',
+                      numberOfInputs: 4,
+                      activeDropDown: true,
+                      child1: TextFieldWidget(labelText: 'Rua:'),
+                      child2: TextFieldWidget(labelText: 'Bairro:'),
+                      child3: TextFieldWidget(labelText: 'Cidade:'),
+                      child4: TextFieldWidget(labelText: 'Estado:'),
+                    ),
+                    FormFieldsWidget(
+                      title: 'Contato',
+                      numberOfInputs: 2,
+                      activeDropDown: true,
+                      child1: TextFieldWidget(
+                        labelText: 'Telefone:',
+                        keyboardType: TextInputType.number,
+                        textController: phoneMask,
+                      ),
+                      child2: TextFieldWidget(
+                        labelText: 'Telefone 2:',
+                        keyboardType: TextInputType.number,
+                        textController: phoneMask2,
+                      ),
+                    ),
+                    FormFieldsWidget(
+                      title: 'Expediente de trabalho',
+                      activeDropDown: false,
+                      numberOfInputs: 4,
+                      dpd1: DropdownButton<String>(
+                        iconSize: 0,
+                        isExpanded: true,
+                        focusColor: Colors.white,
+                        value: _horarioInicial,
+                        //elevation: 5,
+                        style: TextStyle(color: Colors.white),
+                        iconEnabledColor: Colors.black,
+                        items: <String>[
+                          '00:00',
+                          '01:00',
+                          '02:00',
+                          '03:00',
+                          '04:00',
+                          '05:00',
+                          '06:00',
+                          '07:00',
+                          '08:00',
+                          '09:00',
+                          '10:00',
+                          '11:00',
+                          '12:00',
+                          '13:00',
+                          '14:00',
+                          '15:00',
+                          '16:00',
+                          '17:00',
+                          '18:00',
+                          '19:00',
+                          '20:00',
+                          '21:00',
+                          '22:00',
+                          '23:00',
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: Theme.of(context).textTheme.headline4,
+                            ),
+                          );
+                        }).toList(),
+                        hint: Text("Horário Inicial",style: Theme.of(context).textTheme.headline4),
+                        onChanged: (String value) {
+                          setState(() {
+                            _horarioInicial = value;
+                          });
+                        },
+                      ),
+                      dpd2: DropdownButton<String>(
+                        iconSize: 0,
+                        isExpanded: true,
+                        focusColor: Colors.white,
+                        value: _inicioIntervalo,
+                        //elevation: 5,
+                        style: TextStyle(color: Colors.white),
+                        iconEnabledColor: Colors.black,
+                        items: <String>[
+                          '00:00',
+                          '01:00',
+                          '02:00',
+                          '03:00',
+                          '04:00',
+                          '05:00',
+                          '06:00',
+                          '07:00',
+                          '08:00',
+                          '09:00',
+                          '10:00',
+                          '11:00',
+                          '12:00',
+                          '13:00',
+                          '14:00',
+                          '15:00',
+                          '16:00',
+                          '17:00',
+                          '18:00',
+                          '19:00',
+                          '20:00',
+                          '21:00',
+                          '22:00',
+                          '23:00',
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: Theme.of(context).textTheme.headline4,
+                            ),
+                          );
+                        }).toList(),
+                        hint: Text("Inicio do Intervalo",style: Theme.of(context).textTheme.headline4),
+                        onChanged: (String value) {
+                          setState(() {
+                            _inicioIntervalo = value;
+                          });
+                        },
+                      ),
+                      dpd3: DropdownButton<String>(
+                        iconSize: 0,
+                        isExpanded: true,
+                        focusColor: Colors.white,
+                        value: _fimIntervalo,
+                        //elevation: 5,
+                        style: TextStyle(color: Colors.white),
+                        iconEnabledColor: Colors.black,
+                        items: <String>[
+                          '00:00',
+                          '01:00',
+                          '02:00',
+                          '03:00',
+                          '04:00',
+                          '05:00',
+                          '06:00',
+                          '07:00',
+                          '08:00',
+                          '09:00',
+                          '10:00',
+                          '11:00',
+                          '12:00',
+                          '13:00',
+                          '14:00',
+                          '15:00',
+                          '16:00',
+                          '17:00',
+                          '18:00',
+                          '19:00',
+                          '20:00',
+                          '21:00',
+                          '22:00',
+                          '23:00',
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: Theme.of(context).textTheme.headline4,
+                            ),
+                          );
+                        }).toList(),
+                        hint: Text("Fim do Intervalo",style: Theme.of(context).textTheme.headline4),
+                        onChanged: (String value) {
+                          setState(() {
+                            _fimIntervalo = value;
+                          });
+                        },
+                      ),
+                      dpd4: DropdownButton<String>(
+                        iconSize: 0,
+                        isExpanded: true,
+                        focusColor: Colors.white,
+                        value: _horarioFinal,
+                        //elevation: 5,
+                        style: TextStyle(color: Colors.white),
+                        iconEnabledColor: Colors.black,
+                        items: <String>[
+                          '00:00',
+                          '01:00',
+                          '02:00',
+                          '03:00',
+                          '04:00',
+                          '05:00',
+                          '06:00',
+                          '07:00',
+                          '08:00',
+                          '09:00',
+                          '10:00',
+                          '11:00',
+                          '12:00',
+                          '13:00',
+                          '14:00',
+                          '15:00',
+                          '16:00',
+                          '17:00',
+                          '18:00',
+                          '19:00',
+                          '20:00',
+                          '21:00',
+                          '22:00',
+                          '23:00',
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: Theme.of(context).textTheme.headline4,
+                            ),
+                          );
+                        }).toList(),
+                        hint: Text("Horário Final",style: Theme.of(context).textTheme.headline4),
+                        onChanged: (String value) {
+                          setState(() {
+                            _horarioFinal = value;
+                          });
+                        },
+                      ),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.only(bottom: 30, top: 20),
+                        child: TextButton(
+                            onPressed: () {
+                              //TODO implementar salvamento de usuarios
+                            },
+                            child: Text('CADASTRAR')))
+                  ],
+                ),
               ),
             ],
           ),

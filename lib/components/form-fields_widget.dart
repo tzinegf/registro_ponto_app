@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class FormFieldsWidget extends StatelessWidget {
   final String title;
   int numberOfInputs;
+  bool activeDropDown;
   TextFieldWidget child1;
 
   TextFieldWidget child2;
@@ -12,15 +13,27 @@ class FormFieldsWidget extends StatelessWidget {
 
   TextFieldWidget child4;
 
+  DropdownButton dpd1;
+  DropdownButton dpd2;
+  DropdownButton dpd3;
+  DropdownButton dpd4;
+
   FormFieldsWidget(
       {Key,
       key,
       @required this.title,
       @required this.numberOfInputs,
+        @required this.activeDropDown,
       this.child1,
       this.child2,
       this.child3,
-      this.child4})
+      this.child4,
+      this.dpd1,
+      this.dpd2,
+      this.dpd3,
+      this.dpd4
+
+      })
       : super(key: key);
 
   @override
@@ -35,18 +48,29 @@ class FormFieldsWidget extends StatelessWidget {
               right: BorderSide(color: Colors.grey),
               top: BorderSide(color: Colors.grey)),
           borderRadius: BorderRadius.circular(10)),
-      child: Column(
+      child: activeDropDown?Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-              padding: EdgeInsets.only(top: 5, bottom: 20),
-              child: Text(this.title,
-                  style: Theme.of(context).textTheme.caption,
-                  textAlign: TextAlign.left)),
+        children: [Padding(
+            padding: EdgeInsets.only(top: 5, bottom: 20),
+            child: Text(this.title,
+                style: Theme.of(context).textTheme.caption,
+                textAlign: TextAlign.left)),
           numberOfInputs >= 1 ? this.child1 : SizedBox(),
           numberOfInputs >= 2 ? this.child2 : SizedBox(),
           numberOfInputs >= 3 ? this.child3 : SizedBox(),
           numberOfInputs >= 4 ? this.child4 : SizedBox(),
+        ],
+      ):Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [Padding(
+            padding: EdgeInsets.only(top: 5, bottom: 20),
+            child: Text(this.title,
+                style: Theme.of(context).textTheme.caption,
+                textAlign: TextAlign.left)),
+          numberOfInputs >= 1 ? this.dpd1 : SizedBox(),
+          numberOfInputs >= 2 ? this.dpd2 : SizedBox(),
+          numberOfInputs >= 3 ? this.dpd3 : SizedBox(),
+          numberOfInputs >= 4 ? this.dpd4 : SizedBox(),
         ],
       ),
     );
