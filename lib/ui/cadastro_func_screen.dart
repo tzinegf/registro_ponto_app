@@ -1,15 +1,40 @@
+import 'package:gen_profile/gen_profile.dart';
 import 'package:controle_ponto_app/components/form-fields_widget.dart';
 import 'package:controle_ponto_app/components/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
-// ignore: must_be_immutable
 class CadastroFuncScreen extends StatefulWidget {
   @override
   _CadastroFuncScreenState createState() => _CadastroFuncScreenState();
 }
 
 class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
+  TextEditingController cpfcontroller = TextEditingController();
+
+  TextEditingController matriculacontroller = TextEditingController();
+
+  TextEditingController inialmococontroller = TextEditingController();
+
+  TextEditingController telefone2controller = TextEditingController();
+
+  TextEditingController telefone1controller = TextEditingController();
+
+  TextEditingController inieoexpdcontroller = TextEditingController();
+
+  TextEditingController fimexpedcontroller = TextEditingController();
+
+  TextEditingController ruacontroller = TextEditingController();
+
+  TextEditingController cargocontroller = TextEditingController();
+
+  TextEditingController cidadecontroller = TextEditingController();
+
+  TextEditingController bairrocontroller = TextEditingController();
+
+  TextEditingController fimalmococontroller = TextEditingController();
+
+
   var cpfMask = new MaskedTextController(mask: '000.000.000-00');
 
   var phoneMask = new MaskedTextController(mask: '(000) 00000-0000');
@@ -23,8 +48,14 @@ class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
   String _inicioIntervalo;
   String _horarioFinal;
 
+
+   int newMatric = GP.login(numbers: true,size: 10);
+
+
+
   @override
   Widget build(BuildContext context) {
+    matriculacontroller.text = newMatric.toString();
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
@@ -61,7 +92,7 @@ class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
                         textController: cpfMask,
                       ),
                       child3: TextFieldWidget(labelText: 'Cargo:'),
-                      child4: TextFieldWidget(labelText: 'Matrícula'),
+                      child4: TextFieldWidget(labelText: 'Matrícula',textController:matriculacontroller,active: false, ),
                     ),
                     FormFieldsWidget(
                       title: 'Endereço',
