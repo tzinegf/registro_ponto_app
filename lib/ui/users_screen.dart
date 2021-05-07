@@ -5,21 +5,37 @@ import 'package:controle_ponto_app/ui/edit_func_screen.dart';
 import 'package:flutter/material.dart';
 
 class UsersScreen extends StatefulWidget {
-
   @override
   _UsersScreenState createState() => _UsersScreenState();
 }
 
 class _UsersScreenState extends State<UsersScreen> {
-  Future <List<User>> allUsers ;
+  List<User> allUsers;
 
-  @override
-   void initState() {
-    // TODO: implement initState
-    super.initState();
-    allUsers = DbProvider().getAllUsers();
+  List<User> usersFilter;
+
+  int usersCount = 0;
+
+  void getUsers() {
+    DbProvider().getAllUsers().then((value) {
+      setState(() {
+        allUsers = value;
+        usersFilter = allUsers;
+      });
+    });
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    getUsers();
+  }
+
+  dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +56,38 @@ class _UsersScreenState extends State<UsersScreen> {
               height: 40,
               color: Colors.blueGrey,
               child: Center(
-                  child: Text("Funcionários cadastrados: 1",
+                  child: Text("Funcionários cadastrados: ${usersCount}",
                       style: Theme.of(context).textTheme.headline6)),
             ),
             Container(
-              height: 500,
-              child: projecCardtWidget()
-            )
-
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: TextField(
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                    hintText: 'Entre com um nome',
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                    )),
+                onChanged: (value) {
+                  setState(() {
+                    usersFilter = allUsers
+                        .where((u) => (u.nome
+                            .toLowerCase()
+                            .contains(value.toLowerCase())))
+                        .toList();
+                  });
+                },
+              ),
+            ),
+            Container(
+                height: 500,
+                child: allUsers != null
+                    ? projecCardtWidget()
+                    : Container(
+                        child: Center(
+                          child: Text('Nada aqui!'),
+                        ),
+                      ))
           ],
         ),
       ),
@@ -55,40 +95,26 @@ class _UsersScreenState extends State<UsersScreen> {
   }
 
   Widget projecCardtWidget() {
-
-    return FutureBuilder(
-      future: this.allUsers,
-
-      builder: (context,snapshot){
-        if(!snapshot.hasData ){
-          return Center(
-            child: CircularProgressIndicator(),
+    return ListView.builder(
+        itemCount: usersFilter.length,
+        itemBuilder: (context, index) {
+          return Column(
+            children: <Widget>[
+              GestureDetector(
+                child: CardWidget(
+                    nome: usersFilter[index].nome,
+                    status: usersFilter[index].ativo),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditFuncScreen(
+                                user: allUsers[index],
+                              )));
+                },
+              )
+            ],
           );
-        }else if(snapshot.hasError){
-         return Center(
-           child:Text('Error: ${snapshot.error}' ),
-         );
-        }else{
-          return  ListView.builder(
-            itemCount: snapshot.data.length,
-            itemBuilder: (context, index) {
-              var item =snapshot.data[index];
-              return Column(
-                children: <Widget>[
-                  GestureDetector(child: CardWidget(nome: item.nome,status: item.ativo),
-                    onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>EditFuncScreen(user: item,)));
-                    },
-                  )
-                ],
-              );
-            },
-          );
-        }
-
-      },
-    );
-
-
+        });
   }
 }

@@ -40,6 +40,10 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
   TextEditingController fimalmococontroller = TextEditingController();
 
   bool active = false;
+  String _horarioInicial;
+  String _fimIntervalo;
+  String _inicioIntervalo;
+  String _horarioFinal;
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +106,8 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                 child: Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       margin: EdgeInsets.only(
                           left: 10, right: 10, top: 20, bottom: 10),
                       decoration: BoxDecoration(
@@ -115,17 +120,24 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                       child: Column(
                         children: [
                           Container(
-                              margin:
-                                  EdgeInsets.only(left: 20, right: 20, bottom: 5),
+                              margin: EdgeInsets.only(
+                                  left: 20, right: 20, bottom: 5),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('Status:',
-                                      style:
-                                          Theme.of(context).textTheme.headline4),
-                                  Text(widget.user.ativo ? 'ATIVO' : 'DESATIVADO',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline4),
+                                  Text(
+                                      widget.user.ativo
+                                          ? 'ATIVO'
+                                          : 'DESATIVADO',
                                       style: widget.user.ativo
-                                          ? Theme.of(context).textTheme.subtitle2
+                                          ? Theme.of(context)
+                                              .textTheme
+                                              .subtitle2
                                           : Theme.of(context)
                                               .textTheme
                                               .bodyText1),
@@ -151,8 +163,8 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                     FormFieldsWidget(
                       title: 'Informações principais',
                       numberOfInputs: 4,
+                      activeDropDown: true,
                       child1: TextFieldWidget(
-
                         labelText: 'Nome:',
                         active: active,
                         textController: nomecontroller,
@@ -173,6 +185,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                     FormFieldsWidget(
                       title: 'Endereço',
                       numberOfInputs: 3,
+                      activeDropDown: true,
                       child1: TextFieldWidget(
                           labelText: 'Rua:',
                           active: active,
@@ -189,6 +202,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                     FormFieldsWidget(
                       title: 'Contato',
                       numberOfInputs: 2,
+                      activeDropDown: true,
                       child1: TextFieldWidget(
                           labelText: 'Telefone:',
                           active: active,
@@ -198,25 +212,210 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                           active: active,
                           textController: telefone2controller),
                     ),
-                    FormFieldsWidget(
-                      title: 'Expediente de trabalho',
-                      numberOfInputs: 4,
-                      child1: TextFieldWidget(
-                          labelText: 'Horário inicial:',
-                          active: active,
-                          textController: inieoexpdcontroller),
-                      child2: TextFieldWidget(
-                          labelText: 'Inicio do intervalo:',
-                          active: active,
-                          textController: inialmococontroller),
-                      child3: TextFieldWidget(
-                          labelText: 'Fim do intervalo:',
-                          active: active,
-                          textController: fimalmococontroller),
-                      child4: TextFieldWidget(
-                          labelText: 'Horário final:',
-                          active: active,
-                          textController: fimexpedcontroller),
+                    Visibility(
+                      visible: active,
+                      child: FormFieldsWidget(
+                        title: 'Expediente de trabalho',
+                        activeDropDown: false,
+                        numberOfInputs: 4,
+                        dpd1: DropdownButton<String>(
+                          iconSize: 0,
+                          isExpanded: true,
+                          focusColor: Colors.white,
+                          value: _horarioInicial,
+                          items: <String>[
+                            '00:00',
+                            '01:00',
+                            '02:00',
+                            '03:00',
+                            '04:00',
+                            '05:00',
+                            '06:00',
+                            '07:00',
+                            '08:00',
+                            '09:00',
+                            '10:00',
+                            '11:00',
+                            '12:00',
+                            '13:00',
+                            '14:00',
+                            '15:00',
+                            '16:00',
+                            '17:00',
+                            '18:00',
+                            '19:00',
+                            '20:00',
+                            '21:00',
+                            '22:00',
+                            '23:00',
+                          ].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: Theme.of(context).textTheme.headline4,
+                              ),
+                            );
+                          }).toList(),
+                          hint: Text("Horário Inicial",
+                              style: Theme.of(context).textTheme.headline4),
+                          onChanged: (String value) {
+                            setState(() {
+                              _horarioInicial = value;
+                            });
+                          },
+                        ),
+                        dpd2: DropdownButton<String>(
+                          iconSize: 0,
+                          isExpanded: true,
+                          focusColor: Colors.white,
+                          value: _inicioIntervalo,
+                          //elevation: 5,
+                          style: TextStyle(color: Colors.white),
+                          iconEnabledColor: Colors.black,
+                          items: <String>[
+                            '00:00',
+                            '01:00',
+                            '02:00',
+                            '03:00',
+                            '04:00',
+                            '05:00',
+                            '06:00',
+                            '07:00',
+                            '08:00',
+                            '09:00',
+                            '10:00',
+                            '11:00',
+                            '12:00',
+                            '13:00',
+                            '14:00',
+                            '15:00',
+                            '16:00',
+                            '17:00',
+                            '18:00',
+                            '19:00',
+                            '20:00',
+                            '21:00',
+                            '22:00',
+                            '23:00',
+                          ].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: Theme.of(context).textTheme.headline4,
+                              ),
+                            );
+                          }).toList(),
+                          hint: Text("Inicio do Intervalo",
+                              style: Theme.of(context).textTheme.headline4),
+                          onChanged: (String value) {
+                            setState(() {
+                              _inicioIntervalo = value;
+                            });
+                          },
+                        ),
+                        dpd3: DropdownButton<String>(
+                          iconSize: 0,
+                          isExpanded: true,
+                          focusColor: Colors.white,
+                          value: _fimIntervalo,
+                          //elevation: 5,
+                          style: TextStyle(color: Colors.white),
+                          iconEnabledColor: Colors.black,
+                          items: <String>[
+                            '00:00',
+                            '01:00',
+                            '02:00',
+                            '03:00',
+                            '04:00',
+                            '05:00',
+                            '06:00',
+                            '07:00',
+                            '08:00',
+                            '09:00',
+                            '10:00',
+                            '11:00',
+                            '12:00',
+                            '13:00',
+                            '14:00',
+                            '15:00',
+                            '16:00',
+                            '17:00',
+                            '18:00',
+                            '19:00',
+                            '20:00',
+                            '21:00',
+                            '22:00',
+                            '23:00',
+                          ].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: Theme.of(context).textTheme.headline4,
+                              ),
+                            );
+                          }).toList(),
+                          hint: Text("Fim do Intervalo",
+                              style: Theme.of(context).textTheme.headline4),
+                          onChanged: (String value) {
+                            setState(() {
+                              _fimIntervalo = value;
+                            });
+                          },
+                        ),
+                        dpd4: DropdownButton<String>(
+                          iconSize: 0,
+                          isExpanded: true,
+                          focusColor: Colors.white,
+                          value: _horarioFinal,
+                          //elevation: 5,
+                          style: TextStyle(color: Colors.white),
+                          iconEnabledColor: Colors.black,
+                          items: <String>[
+                            '00:00',
+                            '01:00',
+                            '02:00',
+                            '03:00',
+                            '04:00',
+                            '05:00',
+                            '06:00',
+                            '07:00',
+                            '08:00',
+                            '09:00',
+                            '10:00',
+                            '11:00',
+                            '12:00',
+                            '13:00',
+                            '14:00',
+                            '15:00',
+                            '16:00',
+                            '17:00',
+                            '18:00',
+                            '19:00',
+                            '20:00',
+                            '21:00',
+                            '22:00',
+                            '23:00',
+                          ].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: Theme.of(context).textTheme.headline4,
+                              ),
+                            );
+                          }).toList(),
+                          hint: Text("Horário Final",
+                              style: Theme.of(context).textTheme.headline4),
+                          onChanged: (String value) {
+                            setState(() {
+                              _horarioFinal = value;
+                            });
+                          },
+                        ),
+                      ),
                     ),
                     Visibility(
                       child: Padding(
