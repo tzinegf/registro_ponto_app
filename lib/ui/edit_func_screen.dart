@@ -1,6 +1,7 @@
 import 'package:controle_ponto_app/components/form-fields_widget.dart';
 import 'package:controle_ponto_app/components/text_field_widget.dart';
 import 'package:controle_ponto_app/models/user_model.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter/material.dart';
 
 class EditFuncScreen extends StatefulWidget {
@@ -44,6 +45,11 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
   String _fimIntervalo;
   String _inicioIntervalo;
   String _horarioFinal;
+  var cpfMask = new MaskedTextController(mask: '000.000.000-00');
+
+  var phoneMask = new MaskedTextController(mask: '(000) 00000-0000');
+
+  var phoneMask2 = new MaskedTextController(mask: '(000) 00000-0000');
 
   @override
   Widget build(BuildContext context) {
@@ -164,6 +170,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                       title: 'Informações principais',
                       numberOfInputs: 4,
                       activeDropDown: true,
+                      oneDropDown: false,
                       child1: TextFieldWidget(
                         labelText: 'Nome:',
                         active: active,
@@ -172,7 +179,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                       child2: TextFieldWidget(
                           labelText: 'CPF:',
                           active: active,
-                          textController: cpfcontroller),
+                          textController:active? cpfMask:cpfcontroller),
                       child3: TextFieldWidget(
                           labelText: 'Cargo:',
                           active: active,
@@ -186,6 +193,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                       title: 'Endereço',
                       numberOfInputs: 3,
                       activeDropDown: true,
+                      oneDropDown: false,
                       child1: TextFieldWidget(
                           labelText: 'Rua:',
                           active: active,
@@ -198,19 +206,22 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                           labelText: 'Cidade:',
                           active: active,
                           textController: cidadecontroller),
+
+
                     ),
                     FormFieldsWidget(
                       title: 'Contato',
                       numberOfInputs: 2,
                       activeDropDown: true,
+                      oneDropDown: false,
                       child1: TextFieldWidget(
                           labelText: 'Telefone:',
                           active: active,
-                          textController: telefone1controller),
+                          textController: active? phoneMask:telefone1controller),
                       child2: TextFieldWidget(
                           labelText: 'Telefone 2:',
                           active: active,
-                          textController: telefone2controller),
+                          textController: active? phoneMask2:telefone2controller),
                     ),
                     Visibility(
                       visible: active,

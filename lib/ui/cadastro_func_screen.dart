@@ -3,6 +3,7 @@ import 'package:controle_ponto_app/components/form-fields_widget.dart';
 import 'package:controle_ponto_app/components/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:time/time.dart';
 
 class CadastroFuncScreen extends StatefulWidget {
   @override
@@ -34,6 +35,8 @@ class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
 
   TextEditingController fimalmococontroller = TextEditingController();
 
+  TextEditingController estadocontroller = TextEditingController();
+
 
   var cpfMask = new MaskedTextController(mask: '000.000.000-00');
 
@@ -44,13 +47,34 @@ class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
   GlobalKey<FormState> _key = new GlobalKey();
 
   String _horarioInicial;
+  String _estadoinicial;
   String _fimIntervalo;
   String _inicioIntervalo;
   String _horarioFinal;
+  List <String>times =[];
+  List <String> states=[];
+  void newListTimes(){
+    for(int i=0; i<=23;i++){
+      times.add((i.hours).toString().substring(0,8).replaceAll('.', ''));
+     /*
+      for(int j=0;j<60;j++){
+
+        times.add((i.hours+j.minutes).toString());
+      }*/
+    }
+  }
+  void validInputSize(){
+
+  }
+  @override
+  initState(){
+    super.initState();
+    newListTimes();
+    states = ["AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RO", "RS", "RR", "SC", "SE", "SP", "TO"];
+  }
 
 
    int newMatric = GP.login(numbers: true,size: 10);
-
 
 
   @override
@@ -85,6 +109,7 @@ class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
                       title: 'Informações principais',
                       numberOfInputs: 4,
                       activeDropDown: true,
+                      oneDropDown: false,
                       child1: TextFieldWidget(labelText: 'Nome:'),
                       child2: TextFieldWidget(
                         labelText: 'CPF:',
@@ -96,17 +121,43 @@ class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
                     ),
                     FormFieldsWidget(
                       title: 'Endereço',
-                      numberOfInputs: 4,
+                      numberOfInputs: 3,
                       activeDropDown: true,
+                      oneDropDown: false,
                       child1: TextFieldWidget(labelText: 'Rua:'),
                       child2: TextFieldWidget(labelText: 'Bairro:'),
                       child3: TextFieldWidget(labelText: 'Cidade:'),
-                      child4: TextFieldWidget(labelText: 'Estado:'),
+                    /* dpd5: DropdownButton<String>(
+
+                        iconSize: 0,
+                        isExpanded: false,
+                        focusColor: Colors.white,
+                        value: _estadoinicial,
+                        //elevation: 5,
+                        style: TextStyle(color: Colors.white),
+                        iconEnabledColor: Colors.black,
+                        items: states.map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: Theme.of(context).textTheme.headline4
+                            ),
+                          );
+                        }).toList(),
+                        hint: Text("Estado",style: Theme.of(context).textTheme.headline4,textAlign: TextAlign.center,),
+                        onChanged: (String value) {
+                          setState(() {
+                            _estadoinicial=value;
+                          });
+                        },
+                      ),*/
                     ),
                     FormFieldsWidget(
                       title: 'Contato',
                       numberOfInputs: 2,
                       activeDropDown: true,
+                      oneDropDown: false,
                       child1: TextFieldWidget(
                         labelText: 'Telefone:',
                         keyboardType: TextInputType.number,
@@ -122,6 +173,7 @@ class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
                       title: 'Expediente de trabalho',
                       activeDropDown: false,
                       numberOfInputs: 4,
+                      oneDropDown: false,
                       dpd1: DropdownButton<String>(
                         iconSize: 0,
                         isExpanded: true,
@@ -130,32 +182,7 @@ class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
                         //elevation: 5,
                         style: TextStyle(color: Colors.white),
                         iconEnabledColor: Colors.black,
-                        items: <String>[
-                          '00:00',
-                          '01:00',
-                          '02:00',
-                          '03:00',
-                          '04:00',
-                          '05:00',
-                          '06:00',
-                          '07:00',
-                          '08:00',
-                          '09:00',
-                          '10:00',
-                          '11:00',
-                          '12:00',
-                          '13:00',
-                          '14:00',
-                          '15:00',
-                          '16:00',
-                          '17:00',
-                          '18:00',
-                          '19:00',
-                          '20:00',
-                          '21:00',
-                          '22:00',
-                          '23:00',
-                        ].map<DropdownMenuItem<String>>((String value) {
+                        items: times.map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(
@@ -179,32 +206,7 @@ class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
                         //elevation: 5,
                         style: TextStyle(color: Colors.white),
                         iconEnabledColor: Colors.black,
-                        items: <String>[
-                          '00:00',
-                          '01:00',
-                          '02:00',
-                          '03:00',
-                          '04:00',
-                          '05:00',
-                          '06:00',
-                          '07:00',
-                          '08:00',
-                          '09:00',
-                          '10:00',
-                          '11:00',
-                          '12:00',
-                          '13:00',
-                          '14:00',
-                          '15:00',
-                          '16:00',
-                          '17:00',
-                          '18:00',
-                          '19:00',
-                          '20:00',
-                          '21:00',
-                          '22:00',
-                          '23:00',
-                        ].map<DropdownMenuItem<String>>((String value) {
+                        items: times.map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(
@@ -228,32 +230,7 @@ class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
                         //elevation: 5,
                         style: TextStyle(color: Colors.white),
                         iconEnabledColor: Colors.black,
-                        items: <String>[
-                          '00:00',
-                          '01:00',
-                          '02:00',
-                          '03:00',
-                          '04:00',
-                          '05:00',
-                          '06:00',
-                          '07:00',
-                          '08:00',
-                          '09:00',
-                          '10:00',
-                          '11:00',
-                          '12:00',
-                          '13:00',
-                          '14:00',
-                          '15:00',
-                          '16:00',
-                          '17:00',
-                          '18:00',
-                          '19:00',
-                          '20:00',
-                          '21:00',
-                          '22:00',
-                          '23:00',
-                        ].map<DropdownMenuItem<String>>((String value) {
+                        items:times.map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(
@@ -277,32 +254,7 @@ class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
                         //elevation: 5,
                         style: TextStyle(color: Colors.white),
                         iconEnabledColor: Colors.black,
-                        items: <String>[
-                          '00:00',
-                          '01:00',
-                          '02:00',
-                          '03:00',
-                          '04:00',
-                          '05:00',
-                          '06:00',
-                          '07:00',
-                          '08:00',
-                          '09:00',
-                          '10:00',
-                          '11:00',
-                          '12:00',
-                          '13:00',
-                          '14:00',
-                          '15:00',
-                          '16:00',
-                          '17:00',
-                          '18:00',
-                          '19:00',
-                          '20:00',
-                          '21:00',
-                          '22:00',
-                          '23:00',
-                        ].map<DropdownMenuItem<String>>((String value) {
+                        items: times.map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(
@@ -323,6 +275,9 @@ class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
                         padding: EdgeInsets.only(bottom: 30, top: 20),
                         child: TextButton(
                             onPressed: () {
+                              newListTimes();
+                              print(times);
+
                               //TODO implementar salvamento de usuarios
                             },
                             child: Text('CADASTRAR')))

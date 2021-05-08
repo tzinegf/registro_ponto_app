@@ -5,6 +5,7 @@ class FormFieldsWidget extends StatelessWidget {
   final String title;
   int numberOfInputs;
   bool activeDropDown;
+  bool oneDropDown;
   TextFieldWidget child1;
 
   TextFieldWidget child2;
@@ -17,6 +18,7 @@ class FormFieldsWidget extends StatelessWidget {
   DropdownButton dpd2;
   DropdownButton dpd3;
   DropdownButton dpd4;
+  DropdownButton dpd5;
 
   FormFieldsWidget(
       {Key,
@@ -24,6 +26,7 @@ class FormFieldsWidget extends StatelessWidget {
       @required this.title,
       @required this.numberOfInputs,
         @required this.activeDropDown,
+        this.oneDropDown,
       this.child1,
       this.child2,
       this.child3,
@@ -31,7 +34,8 @@ class FormFieldsWidget extends StatelessWidget {
       this.dpd1,
       this.dpd2,
       this.dpd3,
-      this.dpd4
+      this.dpd4,
+      this.dpd5
 
       })
       : super(key: key);
@@ -49,7 +53,7 @@ class FormFieldsWidget extends StatelessWidget {
               top: BorderSide(color: Colors.grey)),
           borderRadius: BorderRadius.circular(10)),
       child: activeDropDown?Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [Padding(
             padding: EdgeInsets.only(top: 5, bottom: 20),
             child: Text(this.title,
@@ -59,9 +63,10 @@ class FormFieldsWidget extends StatelessWidget {
           numberOfInputs >= 2 ? this.child2 : SizedBox(),
           numberOfInputs >= 3 ? this.child3 : SizedBox(),
           numberOfInputs >= 4 ? this.child4 : SizedBox(),
+          oneDropDown?this.dpd5:SizedBox(),
         ],
       ):Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [Padding(
             padding: EdgeInsets.only(top: 5, bottom: 20),
             child: Text(this.title,
@@ -72,6 +77,7 @@ class FormFieldsWidget extends StatelessWidget {
           numberOfInputs >= 3 ? this.dpd3 : SizedBox(),
           numberOfInputs >= 4 ? this.dpd4 : SizedBox(),
         ],
+
       ),
     );
   }
