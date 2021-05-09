@@ -1,7 +1,7 @@
 import 'package:controle_ponto_app/components/text_field_widget.dart';
 import 'package:flutter/material.dart';
 
-class FormFieldsWidget extends StatelessWidget {
+class FormFieldsWidget extends StatelessWidget  {
   final String title;
   int numberOfInputs;
   bool activeDropDown;

@@ -21,6 +21,7 @@ class _UsersScreenState extends State<UsersScreen> {
       setState(() {
         allUsers = value;
         usersFilter = allUsers;
+        usersCount=allUsers.length;
       });
     });
   }
@@ -79,15 +80,16 @@ class _UsersScreenState extends State<UsersScreen> {
                 },
               ),
             ),
-            Container(
-                height: 500,
-                child: allUsers != null
-                    ? projecCardtWidget()
-                    : Container(
-                        child: Center(
-                          child: Text('Nada aqui!'),
-                        ),
-                      ))
+            SingleChildScrollView(
+
+              child: allUsers != null
+                  ? projecCardtWidget()
+                  : Container(
+                      child: Center(
+                        child: Text('Nada aqui!'),
+                      ),
+                    ),
+            )
           ],
         ),
       ),
@@ -96,6 +98,9 @@ class _UsersScreenState extends State<UsersScreen> {
 
   Widget projecCardtWidget() {
     return ListView.builder(
+      scrollDirection:  Axis.vertical,
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
         itemCount: usersFilter.length,
         itemBuilder: (context, index) {
           return Column(

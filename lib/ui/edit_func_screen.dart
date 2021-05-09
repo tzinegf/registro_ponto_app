@@ -1,9 +1,10 @@
 import 'package:controle_ponto_app/components/form-fields_widget.dart';
 import 'package:controle_ponto_app/components/text_field_widget.dart';
 import 'package:controle_ponto_app/models/user_model.dart';
+import 'package:controle_ponto_app/providers/db_provider.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter/material.dart';
-
+import 'package:time/time.dart';
 class EditFuncScreen extends StatefulWidget {
   final User user;
 
@@ -40,35 +41,66 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
 
   TextEditingController fimalmococontroller = TextEditingController();
 
+
+
+
   bool active = false;
   String _horarioInicial;
   String _fimIntervalo;
   String _inicioIntervalo;
   String _horarioFinal;
+
   var cpfMask = new MaskedTextController(mask: '000.000.000-00');
 
   var phoneMask = new MaskedTextController(mask: '(000) 00000-0000');
 
   var phoneMask2 = new MaskedTextController(mask: '(000) 00000-0000');
 
+
+  String convertTime(String time) {
+    int horaIni = int.parse(time.substring(0, 2).replaceAll(':', ''));
+    return horaIni.hours.ago.toString();
+  }
+  List<String> times = [];
+  List<String> states = [];
+
+  void newListTimes() {
+    for (int i = 0; i <= 23; i++) {
+      times.add((i.hours).toString().substring(0, 8).replaceAll('.', ''));
+      /*
+      for(int j=0;j<60;j++){
+
+        times.add((i.hours+j.minutes).toString());
+      }*/
+    }
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    newListTimes();
+  }
+
   @override
   Widget build(BuildContext context) {
     nomecontroller.text = widget.user.nome;
     cpfcontroller.text = widget.user.cpf;
-    matriculacontroller.text = widget.user.codMatricula;
-    inialmococontroller.text = widget.user.horaIniAlmoco;
+
     telefone2controller.text = widget.user.telefone2;
+    matriculacontroller.text = widget.user.codMatricula;
     telefone1controller.text = widget.user.telefone1;
-    inieoexpdcontroller.text = widget.user.horaIniExpedient;
-    fimexpedcontroller.text = widget.user.horaFimExpediente;
     ruacontroller.text = widget.user.rua;
     cargocontroller.text = widget.user.cargo;
     cidadecontroller.text = widget.user.cidade;
     bairrocontroller.text = widget.user.bairro;
-    fimalmococontroller.text = widget.user.horaFimAlmoco;
+
+    _inicioIntervalo = widget.user.horaIniAlmoco;
+    _fimIntervalo = widget.user.horaFimAlmoco;
+    _horarioInicial = widget.user.horaIniExpedient;
+    _horarioFinal = widget.user.horaFimExpediente;
 
     GlobalKey<FormState> _key = new GlobalKey();
-    bool _validate = false;
+
 
     return WillPopScope(
       child: Scaffold(
@@ -178,16 +210,17 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                       ),
                       child2: TextFieldWidget(
                           labelText: 'CPF:',
-                          active: active,
-                          textController:active? cpfMask:cpfcontroller),
+                          active:false ,
+                          textController:cpfcontroller),
                       child3: TextFieldWidget(
                           labelText: 'Cargo:',
                           active: active,
                           textController: cargocontroller),
                       child4: TextFieldWidget(
                           labelText: 'Matrícula',
-                          active: active,
-                          textController: matriculacontroller),
+                          textController: matriculacontroller,
+                          active: false,
+                           ),
                     ),
                     FormFieldsWidget(
                       title: 'Endereço',
@@ -230,36 +263,15 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                         activeDropDown: false,
                         numberOfInputs: 4,
                         dpd1: DropdownButton<String>(
+
                           iconSize: 0,
                           isExpanded: true,
-                          focusColor: Colors.white,
+                          focusColor: Colors.redAccent,
                           value: _horarioInicial,
-                          items: <String>[
-                            '00:00',
-                            '01:00',
-                            '02:00',
-                            '03:00',
-                            '04:00',
-                            '05:00',
-                            '06:00',
-                            '07:00',
-                            '08:00',
-                            '09:00',
-                            '10:00',
-                            '11:00',
-                            '12:00',
-                            '13:00',
-                            '14:00',
-                            '15:00',
-                            '16:00',
-                            '17:00',
-                            '18:00',
-                            '19:00',
-                            '20:00',
-                            '21:00',
-                            '22:00',
-                            '23:00',
-                          ].map<DropdownMenuItem<String>>((String value) {
+                          //elevation: 5,
+                          style: TextStyle(color: Colors.white),
+                          iconEnabledColor: Colors.black,
+                          items: times.map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(
@@ -268,7 +280,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                               ),
                             );
                           }).toList(),
-                          hint: Text("Horário Inicial",
+                          hint: Text(_horarioInicial.toString(),
                               style: Theme.of(context).textTheme.headline4),
                           onChanged: (String value) {
                             setState(() {
@@ -284,32 +296,8 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                           //elevation: 5,
                           style: TextStyle(color: Colors.white),
                           iconEnabledColor: Colors.black,
-                          items: <String>[
-                            '00:00',
-                            '01:00',
-                            '02:00',
-                            '03:00',
-                            '04:00',
-                            '05:00',
-                            '06:00',
-                            '07:00',
-                            '08:00',
-                            '09:00',
-                            '10:00',
-                            '11:00',
-                            '12:00',
-                            '13:00',
-                            '14:00',
-                            '15:00',
-                            '16:00',
-                            '17:00',
-                            '18:00',
-                            '19:00',
-                            '20:00',
-                            '21:00',
-                            '22:00',
-                            '23:00',
-                          ].map<DropdownMenuItem<String>>((String value) {
+                          items:
+                          times.map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(
@@ -334,32 +322,8 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                           //elevation: 5,
                           style: TextStyle(color: Colors.white),
                           iconEnabledColor: Colors.black,
-                          items: <String>[
-                            '00:00',
-                            '01:00',
-                            '02:00',
-                            '03:00',
-                            '04:00',
-                            '05:00',
-                            '06:00',
-                            '07:00',
-                            '08:00',
-                            '09:00',
-                            '10:00',
-                            '11:00',
-                            '12:00',
-                            '13:00',
-                            '14:00',
-                            '15:00',
-                            '16:00',
-                            '17:00',
-                            '18:00',
-                            '19:00',
-                            '20:00',
-                            '21:00',
-                            '22:00',
-                            '23:00',
-                          ].map<DropdownMenuItem<String>>((String value) {
+                          items:
+                          times.map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(
@@ -384,32 +348,8 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                           //elevation: 5,
                           style: TextStyle(color: Colors.white),
                           iconEnabledColor: Colors.black,
-                          items: <String>[
-                            '00:00',
-                            '01:00',
-                            '02:00',
-                            '03:00',
-                            '04:00',
-                            '05:00',
-                            '06:00',
-                            '07:00',
-                            '08:00',
-                            '09:00',
-                            '10:00',
-                            '11:00',
-                            '12:00',
-                            '13:00',
-                            '14:00',
-                            '15:00',
-                            '16:00',
-                            '17:00',
-                            '18:00',
-                            '19:00',
-                            '20:00',
-                            '21:00',
-                            '22:00',
-                            '23:00',
-                          ].map<DropdownMenuItem<String>>((String value) {
+                          items:
+                          times.map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(
@@ -432,7 +372,77 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                       child: Padding(
                           padding: EdgeInsets.only(bottom: 30, top: 20),
                           child: TextButton(
-                              onPressed: () {}, child: Text('SALVAR'))),
+                              onPressed: () {
+                                print('$_inicioIntervalo,$_horarioFinal,$_horarioInicial,$_fimIntervalo');
+                                if (_key.currentState.validate() /*&& _horarioFinal !=null && _horarioInicial !=null && _fimIntervalo !=null&& _inicioIntervalo !=null*/) {
+                                 /* String horarioInicial =
+                                  convertTime(_horarioInicial);
+                                  String fimIntervalo =
+                                  convertTime(_fimIntervalo);
+                                  String inicioIntervalo =
+                                  convertTime(_inicioIntervalo);
+                                  String horarioFinal =
+                                  convertTime(_horarioFinal);*/
+
+                                  DbProvider()
+                                      .updateUser(
+                                      nomecontroller.text,
+                                      cargocontroller.text,
+                                      ruacontroller.text,
+                                      bairrocontroller.text,
+                                      cidadecontroller.text,
+                                     /* fimIntervalo,
+                                      inicioIntervalo.toString(),
+                                      horarioFinal,
+                                      horarioInicial,*/
+                                      phoneMask.text,
+                                      phoneMask2.text,
+                                      true)
+                                      .then((code) {
+                                    if (code.toString() == 'ok') {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                            'Usuário cadastrado com sucesso!',
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline3),
+                                        backgroundColor: Colors.green,
+                                      ));
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(code.toString(),
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline3),
+                                        backgroundColor: Colors.red,
+                                      ));
+                                    }
+                                  });
+                                }else{
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.redAccent,
+                                      content: Text('Preencha todos os campos',style:Theme.of(context)
+                                          .textTheme
+                                          .headline3,textAlign: TextAlign.center,)));
+                                }
+
+
+
+
+
+
+
+
+
+
+
+
+                              }, child: Text('SALVAR'))),
                       visible: active,
                     )
                   ],
