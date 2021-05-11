@@ -85,8 +85,9 @@ class _UsersScreenState extends State<UsersScreen> {
               child: allUsers != null
                   ? projecCardtWidget()
                   : Container(
+                height: 50,
                       child: Center(
-                        child: Text('Nada aqui!'),
+                        child: CircularProgressIndicator(),
                       ),
                     ),
             )

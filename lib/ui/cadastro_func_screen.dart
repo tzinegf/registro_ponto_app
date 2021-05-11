@@ -288,6 +288,7 @@ class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
                             style: Theme.of(context).textTheme.headline4),
                         onChanged: (String value) {
                           setState(() {
+
                             _horarioInicial = value;
                           });
                         },

@@ -37,7 +37,8 @@ class MyApp extends StatelessWidget {
               style: TextButton.styleFrom(
                   primary: Colors.white,
                   backgroundColor: Colors.red,
-                  minimumSize: Size(200, 50))),
+                 // minimumSize: Size(200, 50)
+              )),
 
           // Define the default font family.
           fontFamily: 'Square',
@@ -51,10 +52,11 @@ class MyApp extends StatelessWidget {
             headline4: TextStyle(fontSize: 15.0),
             headline5: TextStyle(fontSize: 12.0, fontStyle: FontStyle.italic, color: Colors.red),
             headline6: TextStyle(fontSize: 12.0, color: Colors.white),
-            caption: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            caption: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             subtitle2: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.blue),
             bodyText1: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.red),
           ),
+
         ),
         home: FutureBuilder(
             future: getValuesSF(),

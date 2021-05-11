@@ -1,10 +1,10 @@
 import 'package:controle_ponto_app/components/form-fields_widget.dart';
 import 'package:controle_ponto_app/components/text_field_widget.dart';
+import 'package:controle_ponto_app/components/timer_widget.dart';
 import 'package:controle_ponto_app/models/user_model.dart';
 import 'package:controle_ponto_app/providers/db_provider.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter/material.dart';
-import 'package:time/time.dart';
 class EditFuncScreen extends StatefulWidget {
   final User user;
 
@@ -16,69 +16,50 @@ class EditFuncScreen extends StatefulWidget {
 
 class _EditFuncScreenState extends State<EditFuncScreen> {
   TextEditingController nomecontroller = TextEditingController();
-
   TextEditingController cpfcontroller = TextEditingController();
-
   TextEditingController matriculacontroller = TextEditingController();
-
-  TextEditingController inialmococontroller = TextEditingController();
-
   TextEditingController telefone2controller = TextEditingController();
-
   TextEditingController telefone1controller = TextEditingController();
-
-  TextEditingController inieoexpdcontroller = TextEditingController();
-
-  TextEditingController fimexpedcontroller = TextEditingController();
-
   TextEditingController ruacontroller = TextEditingController();
-
   TextEditingController cargocontroller = TextEditingController();
-
   TextEditingController cidadecontroller = TextEditingController();
-
   TextEditingController bairrocontroller = TextEditingController();
 
+  TextEditingController inialmococontroller = TextEditingController();
   TextEditingController fimalmococontroller = TextEditingController();
-
-
+   TextEditingController iniexpdcontroller = TextEditingController();
+   TextEditingController fimexpedcontroller = TextEditingController();
 
 
   bool active = false;
-  String _horarioInicial;
+  int _id;
+  String  _horarioInicial;
   String _fimIntervalo;
   String _inicioIntervalo;
   String _horarioFinal;
+  bool _ativo;
+
 
   var cpfMask = new MaskedTextController(mask: '000.000.000-00');
-
   var phoneMask = new MaskedTextController(mask: '(000) 00000-0000');
-
   var phoneMask2 = new MaskedTextController(mask: '(000) 00000-0000');
 
 
-  String convertTime(String time) {
-    int horaIni = int.parse(time.substring(0, 2).replaceAll(':', ''));
-    return horaIni.hours.ago.toString();
+  TimeOfDay convertTime(String time) {
+    int hora = int.parse(time.substring(0, 2));
+    int minut = int.parse(time.substring(3, 5));
+    TimeOfDay newTime;
+    return newTime = TimeOfDay(hour: hora,minute: minut);
   }
-  List<String> times = [];
-  List<String> states = [];
 
-  void newListTimes() {
-    for (int i = 0; i <= 23; i++) {
-      times.add((i.hours).toString().substring(0, 8).replaceAll('.', ''));
-      /*
-      for(int j=0;j<60;j++){
-
-        times.add((i.hours+j.minutes).toString());
-      }*/
-    }
-  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    newListTimes();
+    _inicioIntervalo = widget.user.horaIniAlmoco;
+    _fimIntervalo = widget.user.horaFimAlmoco;
+    _horarioInicial = widget.user.horaIniExpedient;
+    _horarioFinal = widget.user.horaFimExpediente;
   }
 
   @override
@@ -90,16 +71,20 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
     matriculacontroller.text = widget.user.codMatricula;
     telefone1controller.text = widget.user.telefone1;
     ruacontroller.text = widget.user.rua;
+
+    inialmococontroller.text =widget.user.horaIniAlmoco;
+    iniexpdcontroller.text =widget.user.horaIniExpedient;
+    fimexpedcontroller.text =widget.user.horaFimExpediente;
+    fimalmococontroller.text =widget.user.horaFimAlmoco;
+
     cargocontroller.text = widget.user.cargo;
     cidadecontroller.text = widget.user.cidade;
     bairrocontroller.text = widget.user.bairro;
+    _ativo = widget.user.ativo;
+    _id = widget.user.id;
 
-    _inicioIntervalo = widget.user.horaIniAlmoco;
-    _fimIntervalo = widget.user.horaFimAlmoco;
-    _horarioInicial = widget.user.horaIniExpedient;
-    _horarioFinal = widget.user.horaFimExpediente;
 
-    GlobalKey<FormState> _key = new GlobalKey();
+    GlobalKey<FormState> _form_key = new GlobalKey();
 
 
     return WillPopScope(
@@ -140,7 +125,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                         style: Theme.of(context).textTheme.headline6)),
               ),
               Form(
-                key: _key,
+                key: _form_key,
                 child: Column(
                   children: [
                     Container(
@@ -169,10 +154,10 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                                           .textTheme
                                           .headline4),
                                   Text(
-                                      widget.user.ativo
+                                      _ativo
                                           ? 'ATIVO'
                                           : 'DESATIVADO',
-                                      style: widget.user.ativo
+                                      style: _ativo
                                           ? Theme.of(context)
                                               .textTheme
                                               .subtitle2
@@ -182,7 +167,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                                   Visibility(
                                       visible: active,
                                       child: Switch(
-                                        value: this.widget.user.ativo,
+                                        value: this._ativo,
                                         onChanged: (value) {
                                           setState(() {
                                             this.widget.user.ativo = value;
@@ -207,6 +192,12 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                         labelText: 'Nome:',
                         active: active,
                         textController: nomecontroller,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor insira algum nome.';
+                          }
+                          return null;
+                        },
                       ),
                       child2: TextFieldWidget(
                           labelText: 'CPF:',
@@ -215,7 +206,15 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                       child3: TextFieldWidget(
                           labelText: 'Cargo:',
                           active: active,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor preencha este campo.';
+                            }
+                            return null;
+                          },
                           textController: cargocontroller),
+
+
                       child4: TextFieldWidget(
                           labelText: 'Matrícula',
                           textController: matriculacontroller,
@@ -227,18 +226,37 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                       numberOfInputs: 3,
                       activeDropDown: true,
                       oneDropDown: false,
+
                       child1: TextFieldWidget(
                           labelText: 'Rua:',
                           active: active,
-                          textController: ruacontroller),
+                          textController: ruacontroller,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor complete este campo.';
+                          }
+                          return null;
+                        }),
                       child2: TextFieldWidget(
                           labelText: 'Bairro:',
                           active: active,
-                          textController: bairrocontroller),
+                          textController: bairrocontroller,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor complete este campo.';
+                          }
+                          return null;
+                        }),
                       child3: TextFieldWidget(
                           labelText: 'Cidade:',
                           active: active,
-                          textController: cidadecontroller),
+                          textController: cidadecontroller,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor complete este campo.';
+                          }
+                          return null;
+                        },),
 
 
                     ),
@@ -248,43 +266,105 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                       activeDropDown: true,
                       oneDropDown: false,
                       child1: TextFieldWidget(
+                          validator: (value) {
+                            if (phoneMask.text.length <= 13 || value.isEmpty) {
+                              return 'Por favor informe um telefone.';
+                            }
+                            return null;
+                          },
                           labelText: 'Telefone:',
                           active: active,
                           textController: active? phoneMask:telefone1controller),
                       child2: TextFieldWidget(
+                          validator: (value) {
+                            if (!value.isEmpty) {
+                              if (phoneMask2.text.length <= 13 || value.isEmpty) {
+                                return 'Por favor informe um telefone.';
+                              }
+                            }
+                            return null;
+                          },
                           labelText: 'Telefone 2:',
                           active: active,
                           textController: active? phoneMask2:telefone2controller),
                     ),
-                    Visibility(
+
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            margin: EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 10),
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: Colors.grey),
+                    left: BorderSide(color: Colors.grey),
+                    right: BorderSide(color: Colors.grey),
+                    top: BorderSide(color: Colors.grey)),
+                borderRadius: BorderRadius.circular(10)),
+            child:Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [Padding(
+                  padding: EdgeInsets.only(top: 5, bottom: 20),
+                  child: Text('Expediente Seg/Sab', style: Theme.of(context).textTheme.caption)),
+               TimeWidget(time: convertTime(_horarioInicial),label: "Horário inicial",controller: iniexpdcontroller,validator: (s){
+
+
+               },),
+                TimeWidget(time: convertTime(_inicioIntervalo),label: "Inicio do intervalo",controller: inialmococontroller),
+                TimeWidget(time: convertTime(_fimIntervalo),label: "Fim do intervalo",controller: fimalmococontroller),
+                TimeWidget(time: convertTime(_horarioFinal),label: "Horário final ",controller: fimexpedcontroller),
+
+
+
+              ],
+            ),
+          ),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    /*Visibility(
                       visible: active,
                       child: FormFieldsWidget(
-                        title: 'Expediente de trabalho',
+                        title: 'Expediente de trabalho seg/sex',
                         activeDropDown: false,
                         numberOfInputs: 4,
                         dpd1: DropdownButton<String>(
-
                           iconSize: 0,
                           isExpanded: true,
                           focusColor: Colors.redAccent,
-                          value: _horarioInicial,
+                         // value: _horarioInicial,
                           //elevation: 5,
                           style: TextStyle(color: Colors.white),
                           iconEnabledColor: Colors.black,
                           items: times.map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
-                              child: Text(
-                                value,
-                                style: Theme.of(context).textTheme.headline4,
+                              child: Text(value, style: Theme.of(context).textTheme.headline4,
                               ),
                             );
                           }).toList(),
-                          hint: Text(_horarioInicial.toString(),
+                          hint: Text(_horarioInicial,
                               style: Theme.of(context).textTheme.headline4),
                           onChanged: (String value) {
                             setState(() {
                               _horarioInicial = value;
+                              print(_horarioInicial);
                             });
                           },
                         ),
@@ -292,21 +372,18 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                           iconSize: 0,
                           isExpanded: true,
                           focusColor: Colors.white,
-                          value: _inicioIntervalo,
-                          //elevation: 5,
-                          style: TextStyle(color: Colors.white),
-                          iconEnabledColor: Colors.black,
+                         // value: _inicioIntervalo,
+
                           items:
                           times.map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
-                              child: Text(
-                                value,
+                              child: Text(value,
                                 style: Theme.of(context).textTheme.headline4,
                               ),
                             );
                           }).toList(),
-                          hint: Text("Inicio do Intervalo",
+                          hint: Text(_inicioIntervalo,
                               style: Theme.of(context).textTheme.headline4),
                           onChanged: (String value) {
                             setState(() {
@@ -318,7 +395,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                           iconSize: 0,
                           isExpanded: true,
                           focusColor: Colors.white,
-                          value: _fimIntervalo,
+                          //value: _fimIntervalo,
                           //elevation: 5,
                           style: TextStyle(color: Colors.white),
                           iconEnabledColor: Colors.black,
@@ -332,7 +409,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                               ),
                             );
                           }).toList(),
-                          hint: Text("Fim do Intervalo",
+                          hint: Text(_fimIntervalo,
                               style: Theme.of(context).textTheme.headline4),
                           onChanged: (String value) {
                             setState(() {
@@ -344,7 +421,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                           iconSize: 0,
                           isExpanded: true,
                           focusColor: Colors.white,
-                          value: _horarioFinal,
+                         // value: horarioFinal,
                           //elevation: 5,
                           style: TextStyle(color: Colors.white),
                           iconEnabledColor: Colors.black,
@@ -358,7 +435,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                               ),
                             );
                           }).toList(),
-                          hint: Text("Horário Final",
+                          hint: Text(_horarioFinal,
                               style: Theme.of(context).textTheme.headline4),
                           onChanged: (String value) {
                             setState(() {
@@ -367,37 +444,29 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                           },
                         ),
                       ),
-                    ),
+                    ),*/
                     Visibility(
                       child: Padding(
                           padding: EdgeInsets.only(bottom: 30, top: 20),
                           child: TextButton(
                               onPressed: () {
-                                print('$_inicioIntervalo,$_horarioFinal,$_horarioInicial,$_fimIntervalo');
-                                if (_key.currentState.validate() /*&& _horarioFinal !=null && _horarioInicial !=null && _fimIntervalo !=null&& _inicioIntervalo !=null*/) {
-                                 /* String horarioInicial =
-                                  convertTime(_horarioInicial);
-                                  String fimIntervalo =
-                                  convertTime(_fimIntervalo);
-                                  String inicioIntervalo =
-                                  convertTime(_inicioIntervalo);
-                                  String horarioFinal =
-                                  convertTime(_horarioFinal);*/
-
+                                if (_form_key.currentState.validate()) {
                                   DbProvider()
                                       .updateUser(
+                                       _id,
                                       nomecontroller.text,
                                       cargocontroller.text,
                                       ruacontroller.text,
                                       bairrocontroller.text,
                                       cidadecontroller.text,
-                                     /* fimIntervalo,
-                                      inicioIntervalo.toString(),
-                                      horarioFinal,
-                                      horarioInicial,*/
+                                    fimalmococontroller.text,
+                                    fimexpedcontroller.text,
+                                    inialmococontroller.text,
+                                    iniexpdcontroller.text,
                                       phoneMask.text,
                                       phoneMask2.text,
-                                      true)
+                                      _ativo,
+                                      )
                                       .then((code) {
                                     if (code.toString() == 'ok') {
                                       ScaffoldMessenger.of(context)
@@ -430,19 +499,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                                           .textTheme
                                           .headline3,textAlign: TextAlign.center,)));
                                 }
-
-
-
-
-
-
-
-
-
-
-
-
-                              }, child: Text('SALVAR'))),
+                                }, child: Text('SALVAR'))),
                       visible: active,
                     )
                   ],
