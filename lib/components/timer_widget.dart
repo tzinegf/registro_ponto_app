@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 
 class TimeWidget extends StatefulWidget {
    TimeOfDay time;
+   bool ativo;
    String label;
    final FormFieldValidator validator;
    TextEditingController controller;
 
-  TimeWidget({@required this.time,this.label,@required this.controller,this.validator});
+  TimeWidget({@required this.time,this.label,@required this.controller,this.validator,this.ativo});
 
   @override
   _TimeWidgetState createState() => _TimeWidgetState();
@@ -22,6 +23,8 @@ class _TimeWidgetState extends State<TimeWidget> {
     return  Container(
       margin: EdgeInsets.only(left: 20, right: 20, bottom: 5),
       child:TextFormField(
+        textInputAction: TextInputAction.none,
+        enabled: widget.ativo,
         controller: widget.controller,
           validator:widget.validator,
 

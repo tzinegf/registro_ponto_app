@@ -67,9 +67,9 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
     nomecontroller.text = widget.user.nome;
     cpfcontroller.text = widget.user.cpf;
 
-    telefone2controller.text = widget.user.telefone2;
+    phoneMask2.text = widget.user.telefone2;
     matriculacontroller.text = widget.user.codMatricula;
-    telefone1controller.text = widget.user.telefone1;
+    phoneMask.text = widget.user.telefone1;
     ruacontroller.text = widget.user.rua;
 
     inialmococontroller.text =widget.user.horaIniAlmoco;
@@ -274,7 +274,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                           },
                           labelText: 'Telefone:',
                           active: active,
-                          textController: active? phoneMask:telefone1controller),
+                          textController: phoneMask),
                       child2: TextFieldWidget(
                           validator: (value) {
                             if (!value.isEmpty) {
@@ -286,7 +286,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                           },
                           labelText: 'Telefone 2:',
                           active: active,
-                          textController: active? phoneMask2:telefone2controller),
+                          textController:phoneMask2),
                     ),
 
           Container(
@@ -304,13 +304,10 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
               children: [Padding(
                   padding: EdgeInsets.only(top: 5, bottom: 20),
                   child: Text('Expediente Seg/Sab', style: Theme.of(context).textTheme.caption)),
-               TimeWidget(time: convertTime(_horarioInicial),label: "Horário inicial",controller: iniexpdcontroller,validator: (s){
-
-
-               },),
-                TimeWidget(time: convertTime(_inicioIntervalo),label: "Inicio do intervalo",controller: inialmococontroller),
-                TimeWidget(time: convertTime(_fimIntervalo),label: "Fim do intervalo",controller: fimalmococontroller),
-                TimeWidget(time: convertTime(_horarioFinal),label: "Horário final ",controller: fimexpedcontroller),
+               TimeWidget(ativo:active,time: convertTime(_horarioInicial),label: "Horário inicial",controller: iniexpdcontroller,),
+                TimeWidget(ativo:active,time: convertTime(_inicioIntervalo),label: "Inicio do intervalo",controller: inialmococontroller),
+                TimeWidget(ativo:active,time: convertTime(_fimIntervalo),label: "Fim do intervalo",controller: fimalmococontroller),
+                TimeWidget(ativo:active,time: convertTime(_horarioFinal),label: "Horário final ",controller: fimexpedcontroller),
 
 
 
@@ -318,133 +315,6 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
             ),
           ),
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    /*Visibility(
-                      visible: active,
-                      child: FormFieldsWidget(
-                        title: 'Expediente de trabalho seg/sex',
-                        activeDropDown: false,
-                        numberOfInputs: 4,
-                        dpd1: DropdownButton<String>(
-                          iconSize: 0,
-                          isExpanded: true,
-                          focusColor: Colors.redAccent,
-                         // value: _horarioInicial,
-                          //elevation: 5,
-                          style: TextStyle(color: Colors.white),
-                          iconEnabledColor: Colors.black,
-                          items: times.map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value, style: Theme.of(context).textTheme.headline4,
-                              ),
-                            );
-                          }).toList(),
-                          hint: Text(_horarioInicial,
-                              style: Theme.of(context).textTheme.headline4),
-                          onChanged: (String value) {
-                            setState(() {
-                              _horarioInicial = value;
-                              print(_horarioInicial);
-                            });
-                          },
-                        ),
-                        dpd2: DropdownButton<String>(
-                          iconSize: 0,
-                          isExpanded: true,
-                          focusColor: Colors.white,
-                         // value: _inicioIntervalo,
-
-                          items:
-                          times.map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value,
-                                style: Theme.of(context).textTheme.headline4,
-                              ),
-                            );
-                          }).toList(),
-                          hint: Text(_inicioIntervalo,
-                              style: Theme.of(context).textTheme.headline4),
-                          onChanged: (String value) {
-                            setState(() {
-                              _inicioIntervalo = value;
-                            });
-                          },
-                        ),
-                        dpd3: DropdownButton<String>(
-                          iconSize: 0,
-                          isExpanded: true,
-                          focusColor: Colors.white,
-                          //value: _fimIntervalo,
-                          //elevation: 5,
-                          style: TextStyle(color: Colors.white),
-                          iconEnabledColor: Colors.black,
-                          items:
-                          times.map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: Theme.of(context).textTheme.headline4,
-                              ),
-                            );
-                          }).toList(),
-                          hint: Text(_fimIntervalo,
-                              style: Theme.of(context).textTheme.headline4),
-                          onChanged: (String value) {
-                            setState(() {
-                              _fimIntervalo = value;
-                            });
-                          },
-                        ),
-                        dpd4: DropdownButton<String>(
-                          iconSize: 0,
-                          isExpanded: true,
-                          focusColor: Colors.white,
-                         // value: horarioFinal,
-                          //elevation: 5,
-                          style: TextStyle(color: Colors.white),
-                          iconEnabledColor: Colors.black,
-                          items:
-                          times.map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: Theme.of(context).textTheme.headline4,
-                              ),
-                            );
-                          }).toList(),
-                          hint: Text(_horarioFinal,
-                              style: Theme.of(context).textTheme.headline4),
-                          onChanged: (String value) {
-                            setState(() {
-                              _horarioFinal = value;
-                            });
-                          },
-                        ),
-                      ),
-                    ),*/
                     Visibility(
                       child: Padding(
                           padding: EdgeInsets.only(bottom: 30, top: 20),
@@ -472,7 +342,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
                                         content: Text(
-                                            'Usuário cadastrado com sucesso!',
+                                            'Registro atualizado!',
                                             textAlign: TextAlign.center,
                                             style: Theme.of(context)
                                                 .textTheme

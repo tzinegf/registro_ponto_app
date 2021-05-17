@@ -1,3 +1,4 @@
+import 'package:controle_ponto_app/models/user_model.dart';
 import 'package:controle_ponto_app/providers/db_provider.dart';
 import 'package:controle_ponto_app/ui/cadastro_func_screen.dart';
 import 'package:controle_ponto_app/ui/reports_secreen.dart';
@@ -19,11 +20,33 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final userAuthController = TextEditingController();
   final codeBarManual = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  var db = new DbProvider();
+  String _count;
 
   getValuesSF() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String stringValue = prefs.getString('password');
     return stringValue;
+  }
+
+  getCountSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _count =  prefs.getString('count');
+    return _count;
+  }
+
+  addStringToSF(String s) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('count', s);
+  }
+
+
+  @override
+  initState() {
+    super.initState();
+     getCountSF();
   }
 
   String newcode = '';
@@ -55,16 +78,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.blue,
                       iconSize: 100,
                       onPressed: () async {
-                       String code = await FlutterBarcodeScanner.scanBarcode(
+                        String code = await FlutterBarcodeScanner.scanBarcode(
                             '#ff6666', 'teste', true, ScanMode.DEFAULT);
                         Navigator.pop(context, code);
                         //TODO implemetar salvamento do registro de ponto atravez do numero da matrícula
-                         setState(() {
-                           newcode =code;
-                         });
-                      }
+                        db.sendRegister(code, null, "hora_ini_expediente", 0,
+                            DateTime.now().toString(), false);
 
-                      ),
+                        setState(() {
+                          newcode = code;
+                        });
+                      }),
                   Padding(
                       padding: EdgeInsets.only(bottom: 50),
                       child: Text('LEITURA VIA CÓDIGO DE BARRAS',
@@ -74,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: Theme.of(context).textTheme.headline5),
                     onTap: () {
                       Navigator.pop(context);
+
                       _newManualDialog();
                     },
                   )
@@ -123,26 +148,159 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: EdgeInsets.only(bottom: 20),
                       child: Text('INFORME O CÓDIGO',
                           style: Theme.of(context).textTheme.headline4)),
-                  TextButton(onPressed: () {
-                    print(codeBarManual.text);
-                    codeBarManual.clear();
-                    Navigator.pop(context);
+                  TextButton(
+                      onPressed: () async {
 
-                    //TODO implemetar salvamento do registro de ponto atravez do numero da matrícula
+                        if(codeBarManual.text!=null && codeBarManual.text.length == 10 ){
+                          DateTime data = DateTime.now();
+                          var formatter = new DateFormat("yyyy-MM-dd hh:mm:ss");
+                          String formatted = formatter.format(data);
+                          //_count = await getCountSF();
+                          print('$_count teste');
+                          //TODO implemetar controle de variaveis de salvamento
+                          if (_count == null || _count =='0' ) {
+                            db.sendRegister(codeBarManual.text, formatted, "hora_ini_expediente", 0, formatted, false).then((value)async{
+                              if(value.toString() == '1'){
+                                await addStringToSF(value.toString());
+                                await getCountSF();
+                                ScaffoldMessenger.of(_scaffoldKey.currentContext)
+                                    .showSnackBar(SnackBar(
+                                  content: Text('Ponto registrado!',
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(_scaffoldKey.currentContext)
+                                          .textTheme
+                                          .headline3),
+                                  backgroundColor: Colors.green,
+                                ));
+                              }else{
+                                ScaffoldMessenger.of(_scaffoldKey.currentContext)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                      value.toString(),
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(_scaffoldKey.currentContext)
+                                          .textTheme
+                                          .headline3),
+                                  backgroundColor: Colors.red,
+                                ));
+                              }
+                            });
+                          }else if (_count == '1') {
+                            db.sendRegister(codeBarManual.text,formatted,"hora_ini_almoco",1,formatted,false).then((value)async{
+                              if(value.toString() == '2'){
+                                await addStringToSF(value.toString());
+                                await getCountSF();
+                                ScaffoldMessenger.of(_scaffoldKey.currentContext)
+                                    .showSnackBar(SnackBar(
+                                  content: Text('Ponto registrado!',
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(_scaffoldKey.currentContext)
+                                          .textTheme
+                                          .headline3),
+                                  backgroundColor: Colors.green,
+                                ));
+                              }else{
+                                ScaffoldMessenger.of(_scaffoldKey.currentContext)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                      value.toString(),
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(_scaffoldKey.currentContext)
+                                          .textTheme
+                                          .headline3),
+                                  backgroundColor: Colors.red,
+                                ));
+                              }
+                            });
+
+                          }  else if (_count == '2') {
+                            db.sendRegister(codeBarManual.text, formatted, "hora_fim_almoco", 2, formatted, false).then((value)async{
+                              if(value.toString() == '3'){
+                                await addStringToSF(value.toString());
+                                await getCountSF();
+                                ScaffoldMessenger.of(_scaffoldKey.currentContext)
+                                    .showSnackBar(SnackBar(
+                                  content: Text('Ponto registrado!',
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(_scaffoldKey.currentContext)
+                                          .textTheme
+                                          .headline3),
+                                  backgroundColor: Colors.green,
+                                ));
+                              }else{
+                                ScaffoldMessenger.of(_scaffoldKey.currentContext)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                      value.toString(),
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(_scaffoldKey.currentContext)
+                                          .textTheme
+                                          .headline3),
+                                  backgroundColor: Colors.red,
+                                ));
+                              }
+                            });
+                          } else if (_count == '3') {
+                            db.sendRegister(codeBarManual.text, formatted, "hora_fim_expediente", 3, formatted, true).then((value)async{
+                              if(value.toString() == '4'){
+                                await addStringToSF(value.toString());
+                                await getCountSF();
+                                ScaffoldMessenger.of(_scaffoldKey.currentContext)
+                                    .showSnackBar(SnackBar(
+                                  content: Text('Ponto registrado!',
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(_scaffoldKey.currentContext)
+                                          .textTheme
+                                          .headline3),
+                                  backgroundColor: Colors.green,
+                                ));
+                              }else{
+                                ScaffoldMessenger.of(_scaffoldKey.currentContext)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                      value.toString(),
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(_scaffoldKey.currentContext)
+                                          .textTheme
+                                          .headline3),
+                                  backgroundColor: Colors.red,
+                                ));
+                              }
+                            });
+                          }
 
 
-                  }, child: Text('REGISTRAR'))
+                          codeBarManual.clear();
+                          Navigator.pop(context);
+
+                        }
+                        else {
+                        showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                        return AlertDialog(
+                        content: Text(
+                        'O código deve conter 10 digitos!',
+                        style: Theme.of(context).textTheme.headline4,
+                        textAlign: TextAlign.center,
+                        ));
+                        });
+                        }
+        },
+
+                      child: Text('REGISTRAR'))
                 ],
               ),
             ),
           );
         });
   }
+
   Widget _userAuthDialog(int n) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          String _information ='';
+          String _information = '';
           return Dialog(
             child: Container(
               height: 300,
@@ -166,37 +324,57 @@ class _HomeScreenState extends State<HomeScreen> {
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )),
+                        borderRadius: BorderRadius.circular(10),
+                      )),
                     ),
                   ),
                   Padding(
                       padding: EdgeInsets.only(bottom: 5),
-                      child: Text('Informe a senha de administração', style: Theme.of(context).textTheme.headline4)),
+                      child: Text('Informe a senha de administração',
+                          style: Theme.of(context).textTheme.headline4)),
                   Padding(
                       padding: EdgeInsets.only(bottom: 5),
-                      child: Text(_information, style: Theme.of(context).textTheme.headline4)),
-                  TextButton(onPressed: () async{
-                   String password = await getValuesSF();
+                      child: Text(_information,
+                          style: Theme.of(context).textTheme.headline4)),
+                  TextButton(
+                      onPressed: () async {
+                        String password = await getValuesSF();
 
-                    if(userAuthController.text == password){
-                      _information ='';
-                      userAuthController.clear();
-                      Navigator.pop(context);
-                      if(n==1){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => CadastroFuncScreen()));
-                      }else if(n==2){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => UsersScreen()));
-                       }else if(n==3){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ReportsScreen()));}
-                    }else{
-          showDialog(
-          context: context,
-          builder: (BuildContext context) {
-           return AlertDialog(content: Text('Senha icorreta!', style: Theme.of(context).textTheme.headline4,textAlign: TextAlign.center,));
-          });
-                    }
-                  }, child: Text('ENTRAR'))
+                        if (userAuthController.text == password) {
+                          _information = '';
+                          userAuthController.clear();
+                          Navigator.pop(context);
+                          if (n == 1) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        CadastroFuncScreen()));
+                          } else if (n == 2) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => UsersScreen()));
+                          } else if (n == 3) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ReportsScreen()));
+                          }
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                    content: Text(
+                                  'Senha icorreta!',
+                                  style: Theme.of(context).textTheme.headline4,
+                                  textAlign: TextAlign.center,
+                                ));
+                              });
+                        }
+                      },
+                      child: Text('ENTRAR'))
                 ],
               ),
             ),
@@ -207,6 +385,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Sistema de ponto eletrônico'),
         centerTitle: true,

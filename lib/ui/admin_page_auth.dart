@@ -7,7 +7,7 @@ class AdminPageAuth extends StatelessWidget {
 
   addStringToSF(String s) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('password', s);
+    await prefs.setString('password', s);
   }
 
   @override
