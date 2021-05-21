@@ -1,14 +1,44 @@
+import 'package:controle_ponto_app/components/date_widget.dart';
 import 'package:controle_ponto_app/components/report_widget.dart';
+import 'package:controle_ponto_app/models/relatorio_model.dart';
 import 'package:controle_ponto_app/models/user_model.dart';
 import 'package:controle_ponto_app/providers/db_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ReportsScreen extends StatefulWidget {
+
+
+
+
   @override
   _ReportsScreenState createState() => _ReportsScreenState();
 }
 
-class _ReportsScreenState extends State<ReportsScreen> {/*
+class _ReportsScreenState extends State<ReportsScreen> {
+
+  List<Relatorio> relatorios;
+  TextEditingController controller = new TextEditingController();
+  String _initialDate = DateFormat("y'-'MM'-'d", "pt_BR").format(DateTime.now());
+
+
+  void getReports(String data ) {
+    DbProvider().getAllRelatoryDay(data).then((value) {
+      setState(() {
+        relatorios = value;
+      });
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    // TODO: implement initState
+    getReports(_initialDate);
+    controller.text =_initialDate;
+
+  }
+
+  /*
   List<User> usersFilter;
   List<User> allUsers;
 
@@ -45,7 +75,7 @@ class _ReportsScreenState extends State<ReportsScreen> {/*
               height: 40,
               color: Colors.blueGrey,
               child: Center(
-                  child: Text("Relatórios diarios e mensais",
+                  child: Text("Relatório diario",
                       style: Theme.of(context).textTheme.headline6)),
             ),
             Column(
@@ -70,8 +100,17 @@ class _ReportsScreenState extends State<ReportsScreen> {/*
                     },
                   ),
                 ),*/
-                ReportWidget( mes: true,),
-                ReportWidget(mes: false,),
+                DateWidget(date: DateTime.now(), controller: controller,getReports:getReports),
+                SingleChildScrollView(
+
+                  child: relatorios != null
+                      ? ReportWidget(listRelatorios: relatorios,data:controller.text)
+                      : Container(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                ),
 
                 //TODO   implemntar relatorios
               ],

@@ -1,3 +1,5 @@
+import 'package:controle_ponto_app/models/expediente_model.dart';
+import 'package:controle_ponto_app/models/relatorio_model.dart';
 import 'package:controle_ponto_app/models/user_model.dart';
 import 'package:dio/dio.dart';
 
@@ -16,6 +18,19 @@ class DbProvider {
     }
 
   }
+  Future<List<Relatorio>> getAllRelatoryDay(String data) async {
+    try{
+      response = await dio.post('$url/relatoryday',data: {
+        "hora_ini":"${data} 00:00:00",
+        "hora_fim":"${data} 23:59:59"
+      });
+
+      return (response.data).map<Relatorio>((relatorio) => Relatorio.fromJson(relatorio)).toList();
+    }catch(e){
+      throw e;
+    }
+
+  }
 
   dynamic sendUser(int codMatricula, String nome,String cpf, String cargo,String rua, String bairro, String cidade, String horaFimAlmoco, String horaIniAlmoco, String horaFimExpediente, String horaIniExpediente, String telefone1, String telefone2,bool ativo ) async {
     try{
@@ -27,9 +42,9 @@ class DbProvider {
     }
 
   }
-  dynamic sendRegister(String userCod, String horaPonto,String descExp, int count, String createDate,bool endOfDay ) async {
+  dynamic sendRegister(String userCod, String horaPonto,String descExp, int count, String createDate ) async {
     try{
-      response = await dio.post('$url/newexpediente', data: {"cod_matricula":userCod,"id":null,descExp:horaPonto,"count_times":count,"created_at":createDate,"end_of_day":endOfDay});
+      response = await dio.post('$url/newexpediente', data: {"cod_matricula":userCod,"id":null,descExp:horaPonto,"count_times":count,"created_at":createDate});
       print(response);
       return response;
 
@@ -40,10 +55,22 @@ class DbProvider {
 
 
 
+
   dynamic updateUser(int id, String nome, String cargo,String rua, String bairro, String cidade, String horaFimAlmoco, String horaIniAlmoco, String horaFimExpediente, String horaIniExpediente, String telefone1, String telefone2,bool ativo ) async {
     try{
       response = await dio.patch('$url/edituser/$id', data: {'nome':nome,'cargo':cargo, 'rua':rua, 'bairro':bairro, 'cidade':cidade, 'hora_fim_almoco':horaFimAlmoco, 'hora_ini_almoco':horaIniAlmoco, 'hora_fim_expediente':horaFimExpediente, 'hora_ini_expediente':horaIniExpediente, 'telefone1':telefone1, 'telefone2':telefone2,'ativo':ativo });
       return response;
+    }catch(e){
+      print ('Erro $e.');
+    }
+
+  }
+
+  dynamic getCountSF(String id) async {
+    try{
+      response = await dio.get('$url/count/$id',);
+     return Expediente.fromJson(response.data).countTimes;
+
     }catch(e){
       print ('Erro $e.');
     }

@@ -1,14 +1,14 @@
 
-import 'package:controle_ponto_app/models/user_model.dart';
+import 'package:controle_ponto_app/models/relatorio_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class ReportWidget extends StatefulWidget {
-  final int itemCount;
-  final bool mes;
-  List<User> listUsers;
 
-  ReportWidget({this.itemCount,this.listUsers,this.mes});
+class ReportWidget extends StatefulWidget {
+  List<Relatorio> listRelatorios;
+  String data;
+
+  ReportWidget({this.listRelatorios,this.data});
 
 
 
@@ -17,25 +17,36 @@ class ReportWidget extends StatefulWidget {
 }
 
 class _ReportWidgetState extends State<ReportWidget> {
-  final DateTime data = DateTime.now();
+
+  String  dateTime(String data){
+    if(data!= null){
+      final f = new DateFormat('hh:mm:ss');
+      DateTime dateTime =  DateTime.tryParse(data).toLocal();
+      return f.format(dateTime).toString();
+    }
+    return '';
+
+
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
+
+
     return Container(
-      height: 150,
       child: Column(
         children: [
-          Row( mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              widget.mes?Text('Maio 2021',style: Theme.of(context).textTheme.headline2):Container()],
-          ),
           ListView.builder(
               scrollDirection: Axis.vertical,
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: 1,
+              itemCount: widget.listRelatorios.length,
               itemBuilder: (context, index) {
-                return Container(
+
+                if (widget.listRelatorios[index].existeRegistroPonto =='1') {
+                  return Container(
                   padding: EdgeInsets.only(top: 10,left: 20,right: 20,bottom: 10) ,
                   child: Column(
                     children: <Widget>[
@@ -43,17 +54,19 @@ class _ReportWidgetState extends State<ReportWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
 
-
                         children: [
 
                          Padding(
 
                              padding: EdgeInsets.only(top: 5,bottom: 10),
-                         child:  Text(
-                             DateFormat("EEEE d ", "pt_BR").format(data),style: Theme.of(context).textTheme.caption)
-                         ),  Padding(padding: EdgeInsets.only(top: 5,bottom: 10),
-                         child:  Text('4 Registros ',style: Theme.of(context).textTheme.caption),
-                         )
+                         child:  Text(widget.listRelatorios[index].nome,style: Theme.of(context).textTheme.headline2)
+                         ),
+                          Padding(
+
+                              padding: EdgeInsets.only(top: 5,bottom: 10),
+                              child: widget.listRelatorios[index].usuarioAtivo==1? Text('ATIVO',style: Theme.of(context).textTheme.subtitle2):
+                              Text('DESATIVADO',style: Theme.of(context).textTheme.bodyText1)
+                          )
 
                         ],
                       ),
@@ -61,30 +74,75 @@ class _ReportWidgetState extends State<ReportWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Entrada'),
-                          Text('08:00 ')
+                          Text( dateTime(widget.listRelatorios[index].hora_ini)),
+
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Saida'),
-                          Text('12:00 ')
+                          Text( dateTime(widget.listRelatorios[index].hora_saida_intervalo)),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Entrada'),
-                          Text('14:00 ')
+                          Text(dateTime(widget.listRelatorios[index].hora_retorno_intervalo))
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Saida'),
-                          Text('18:00 ')
+                          Text(dateTime(widget.listRelatorios[index].hora_saida))
                         ],
                       ),
+                      Divider(),
+                      Padding(
+
+                          padding: EdgeInsets.only(top: 5,bottom: 10),
+                          child:  Text('1º turno',style: Theme.of(context).textTheme.caption)
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Horas trabalhadas'),
+                          Text(widget.listRelatorios[index].horasTrab1Turno)
+                        ],
+                      ),
+                      Divider(),
+                      Padding(
+
+                          padding: EdgeInsets.only(top: 5,bottom: 10),
+                          child:  Text('2º turno',style: Theme.of(context).textTheme.caption)
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Horas trabalhadas'),
+                          Text(widget.listRelatorios[index].horasTrab2Turno)
+                        ],
+                      ),
+                      Divider(),
+                      Padding(
+
+                          padding: EdgeInsets.only(top: 5,bottom: 10),
+                          child:  Text('Total de Horas',style: Theme.of(context).textTheme.caption)
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Total'),
+                          Text(widget.listRelatorios[index].horasTrabTotais)
+                        ],
+                      ),
+                      Divider(
+                        thickness: 2,
+                        color: Colors.black45,
+                      )
+
 
 
 
@@ -93,6 +151,108 @@ class _ReportWidgetState extends State<ReportWidget> {
                     ],
                   ),
                 );
+                } else {
+                  return Container(
+                    padding: EdgeInsets.only(top: 10,left: 20,right: 20,bottom: 10) ,
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+
+                          children: [
+
+                            Padding(
+
+                                padding: EdgeInsets.only(top: 5,bottom: 10),
+                                child:  Text(widget.listRelatorios[index].nome,style: Theme.of(context).textTheme.headline2)
+                            ),
+                            Padding(
+
+                                padding: EdgeInsets.only(top: 5,bottom: 10),
+                                child: widget.listRelatorios[index].usuarioAtivo==1? Text('ATIVO',style: Theme.of(context).textTheme.subtitle2):
+                                Text('DESATIVADO',style: Theme.of(context).textTheme.bodyText1)
+                            )
+
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Entrada'),
+                            Text( 'Sem registro nessa data',style:Theme.of(context).textTheme.bodyText1),
+
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Saida'),
+                            Text( 'Sem registro nessa data',style:Theme.of(context).textTheme.bodyText1),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Entrada'),
+                            Text( 'Sem registro nessa data',style:Theme.of(context).textTheme.bodyText1),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Saida'),
+                            Text( 'Sem registro nessa data',style:Theme.of(context).textTheme.bodyText1),
+                          ],
+                        ),
+                        Divider(),
+                        Padding(
+
+                            padding: EdgeInsets.only(top: 5,bottom: 10),
+                            child:  Text('1º turno',style: Theme.of(context).textTheme.caption)
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Horas trabalhadas'),
+                            Text( 'Sem registro nessa data',style:Theme.of(context).textTheme.bodyText1),
+                          ],
+                        ),
+                        Divider(),
+                        Padding(
+
+                            padding: EdgeInsets.only(top: 5,bottom: 10),
+                            child:  Text('2º turno',style: Theme.of(context).textTheme.caption)
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Horas trabalhadas'),
+                            Text( 'Sem registro nessa data',style:Theme.of(context).textTheme.bodyText1),
+                          ],
+                        ),
+                        Divider(),
+                        Padding(
+
+                            padding: EdgeInsets.only(top: 5,bottom: 10),
+                            child:  Text('Total de Horas',style: Theme.of(context).textTheme.caption)
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Total'),
+                            Text( 'Sem registro nessa data',style:Theme.of(context).textTheme.bodyText1),
+                          ],
+                        ),
+                        Divider(
+                          thickness: 2,
+                          color: Colors.black45,
+                        )
+
+                      ],
+                    ),
+                  );
+                }
               }),
         ],
       ),
