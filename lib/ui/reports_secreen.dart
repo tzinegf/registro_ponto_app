@@ -60,7 +60,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Relatórios'),
+        title: Text('Relatório'),
         centerTitle: true,
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -112,7 +112,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   ),
                 ),
 
-                //TODO   implemntar relatorios
               ],
             ),
           ],

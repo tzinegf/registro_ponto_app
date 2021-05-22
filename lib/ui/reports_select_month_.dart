@@ -1,16 +1,19 @@
+
 import 'package:controle_ponto_app/components/card_widget.dart';
 import 'package:controle_ponto_app/models/user_model.dart';
 import 'package:controle_ponto_app/providers/db_provider.dart';
-import 'package:controle_ponto_app/ui/edit_func_screen.dart';
+import 'package:controle_ponto_app/ui/reports_month_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 
-class UsersScreen extends StatefulWidget {
+class ReportsMonthScreen extends StatefulWidget {
   @override
-  _UsersScreenState createState() => _UsersScreenState();
+  _ReportsMonthScreenState createState() => _ReportsMonthScreenState();
 }
 
-class _UsersScreenState extends State<UsersScreen> {
+class _ReportsMonthScreenState extends State<ReportsMonthScreen> {
   List<User> allUsers;
+  TextEditingController controller;
 
   List<User> usersFilter;
 
@@ -42,7 +45,7 @@ class _UsersScreenState extends State<UsersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Funcionários'),
+        title: Text('Relátorio'),
         centerTitle: true,
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -57,7 +60,7 @@ class _UsersScreenState extends State<UsersScreen> {
               height: 40,
               color: Colors.blueGrey,
               child: Center(
-                  child: Text("Funcionários cadastrados: ${usersCount}",
+                  child: Text("Relátorio mensal",
                       style: Theme.of(context).textTheme.headline6)),
             ),
             Container(
@@ -110,13 +113,71 @@ class _UsersScreenState extends State<UsersScreen> {
                 child: CardWidget(
                     nome: usersFilter[index].nome,
                     status: usersFilter[index].ativo),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => EditFuncScreen(user: allUsers[index],)));
+                onTap: ()async {
+                  showMonthPicker(
+                    context: context,
+                    firstDate: DateTime(DateTime.now().year - 10, 5),
+                    lastDate: DateTime(DateTime.now().year, 9),
+                    initialDate: DateTime.now(),
+                    locale: Locale("pt"),
+                  ).then((date) {
+                    if(date != null) {
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => ReportMonthScreen(date,usersFilter[index].id)));
+                    }
+                    return ;
+
+                  });
+
+
+
+                  /*
+                  DateTime newDate= await showDatePicker(
+                    initialDatePickerMode: DatePickerMode.values[0],
+
+                    firstDate: DateTime(2010,1,1),
+                    lastDate: DateTime.now(),
+
+                    context: context,
+                    initialDate:DateTime.now(),
+                  );
+*/
                 },
               )
             ],
+          );
+        });
+  }
+
+  Widget _newManualDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            child: Container(
+              height: 300,
+              width: 300,
+              child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 30),
+                    height: 40,
+                    width: 300,
+                    color: Colors.red,
+                    child: Center(
+                        child: Text('SELECIONE O MÊS',
+                            style: Theme.of(context).textTheme.headline3)),
+                  ),
+
+                  TextButton(
+                      onPressed: () async {
+
+                      },
+
+                      child: Text('REGISTRAR'))
+                ],
+              ),
+            ),
           );
         });
   }

@@ -2,6 +2,7 @@ import 'package:controle_ponto_app/models/expediente_model.dart';
 import 'package:controle_ponto_app/models/user_model.dart';
 import 'package:controle_ponto_app/providers/db_provider.dart';
 import 'package:controle_ponto_app/ui/cadastro_func_screen.dart';
+import 'package:controle_ponto_app/ui/reports_select_month_.dart';
 import 'package:controle_ponto_app/ui/reports_secreen.dart';
 import 'package:controle_ponto_app/ui/users_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -210,6 +211,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 MaterialPageRoute(
                                     builder: (context) => ReportsScreen()));
                           }
+                          else if (n == 4) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ReportsMonthScreen()));
+                          }
                         } else {
                           showDialog(
                               context: context,
@@ -327,11 +334,19 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              title: Text('Relatórios',
+              title: Text('Relatório diário',
                   style: TextStyle(fontSize: 20, color: Colors.white),
                   textAlign: TextAlign.center),
               onTap: () {
                 _userAuthDialog(3);
+              },
+            ),
+            ListTile(
+              title: Text('Relatório mensal',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                  textAlign: TextAlign.center),
+              onTap: () {
+                _userAuthDialog(4);
               },
             ),
             Padding(
@@ -359,7 +374,6 @@ void registerNewPoint(String codebar, DbProvider db,GlobalKey<ScaffoldState> _sc
     String formatted = formatter.format(data);
     int _count = await db.getCountSF(codebar);
 
-    //TODO implemetar controle de variaveis de salvamento
     if (_count == null || _count == 0 ) {
       db.sendRegister(codebar, formatted, "hora_ini_expediente", 0, formatted).then((value)async{
         if(value.toString() == '1'){
