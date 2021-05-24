@@ -1,12 +1,13 @@
 import 'package:controle_ponto_app/models/expediente_model.dart';
 import 'package:controle_ponto_app/models/relatorio_model.dart';
+import 'package:controle_ponto_app/models/relatorio_month_model.dart';
 import 'package:controle_ponto_app/models/user_model.dart';
 import 'package:dio/dio.dart';
 
 class DbProvider {
   Response response;
   var dio = Dio();
-  final url ='http://192.168.5.131:3333';
+  final url ='http://192.168.3.104:3333';
 
   Future<List<User>> getAllUsers() async {
     try{
@@ -26,6 +27,18 @@ class DbProvider {
       });
 
       return (response.data).map<Relatorio>((relatorio) => Relatorio.fromJson(relatorio)).toList();
+    }catch(e){
+      throw e;
+    }
+
+  } Future<List<RelatorioMonth>> getAllRelatoryMonth(int id,String ano, String mes) async {
+    try{
+      response = await dio.post('$url/relatorymonth/$id',data: {
+        "mes":"${mes}",
+        "ano":"${ano}"
+      });
+
+      return (response.data).map<RelatorioMonth>((relatorioMonth) => RelatorioMonth.fromJson(relatorioMonth)).toList();
     }catch(e){
       throw e;
     }

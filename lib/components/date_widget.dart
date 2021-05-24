@@ -37,6 +37,7 @@ class _DateWidgetState extends State<DateWidget> {
               firstDate: DateTime(2010,1,1),
               lastDate: DateTime.now(),
 
+
               context: context,
               initialDate:widget.date,
             );

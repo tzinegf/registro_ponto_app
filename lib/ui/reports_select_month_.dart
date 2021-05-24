@@ -117,13 +117,13 @@ class _ReportsMonthScreenState extends State<ReportsMonthScreen> {
                   showMonthPicker(
                     context: context,
                     firstDate: DateTime(DateTime.now().year - 10, 5),
-                    lastDate: DateTime(DateTime.now().year, 9),
+                    lastDate: DateTime(DateTime.now().year,DateTime.now().month),
                     initialDate: DateTime.now(),
                     locale: Locale("pt"),
                   ).then((date) {
                     if(date != null) {
                       Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => ReportMonthScreen(date,usersFilter[index].id)));
+                          builder: (context) => ReportMonthScreen(date,usersFilter[index].id,usersFilter[index].nome)));
                     }
                     return ;
 
