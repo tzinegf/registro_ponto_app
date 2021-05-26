@@ -18,6 +18,7 @@ class TimeWidget extends StatefulWidget {
 
 class _TimeWidgetState extends State<TimeWidget> {
 
+
   @override
   Widget build(BuildContext context) {
     return  Container(
@@ -38,9 +39,11 @@ class _TimeWidgetState extends State<TimeWidget> {
               initialTime: widget.time,
             );
             if(newTime != null){
+              final localizations = MaterialLocalizations.of(context);
+              final formattedTimeOfDay = localizations.formatTimeOfDay(newTime);
               setState(() {
-                widget.time = newTime;
-                widget.controller.text= '${newTime.hour}:${newTime.minute}';
+                widget.time =newTime ;
+                widget.controller.text= formattedTimeOfDay;
               });
             }
 

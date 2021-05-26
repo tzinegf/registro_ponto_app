@@ -33,9 +33,9 @@ class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
 
   var cpfMask = new MaskedTextController(mask: '000.000.000-00');
 
-  var phoneMask = new MaskedTextController(mask: '(000) 00000-0000');
+  var phoneMask = new MaskedTextController(mask: '(00) 00000-0000');
 
-  var phoneMask2 = new MaskedTextController(mask: '(000) 00000-0000');
+  var phoneMask2 = new MaskedTextController(mask: '(00) 00000-0000');
 
   GlobalKey<FormState> _key = new GlobalKey();
 
@@ -172,7 +172,7 @@ class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
                       child1: TextFieldWidget(
                         validator: (value) {
                           if (phoneMask.text.length <= 13 || value.isEmpty) {
-                            return 'Por favor informe um telefone.';
+                            return 'Por favor informe um telefone valido.';
                           }
                           return null;
                         },
@@ -184,7 +184,7 @@ class _CadastroFuncScreenState extends State<CadastroFuncScreen> {
                         validator: (value) {
                           if (!value.isEmpty) {
                             if (phoneMask2.text.length <= 13 || value.isEmpty) {
-                              return 'Por favor informe um telefone.';
+                              return 'Por favor informe um telefone valido.';
                             }
                           }
                           return null;

@@ -45,7 +45,7 @@ class _ReportWidgetState extends State<ReportWidget> {
               itemCount: widget.listRelatorios.length,
               itemBuilder: (context, index) {
 
-                if (widget.listRelatorios[index].existeRegistroPonto =='1') {
+                if (widget.listRelatorios[index].existeRegistroPonto ==1) {
                   return Container(
                   padding: EdgeInsets.only(top: 10,left: 20,right: 20,bottom: 10) ,
                   child: Column(
@@ -134,8 +134,8 @@ class _ReportWidgetState extends State<ReportWidget> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Total'),
-                          Text(widget.listRelatorios[index].horasTrabTotais)
+                          Text('Total',style: TextStyle(fontWeight: FontWeight.bold),),
+                          widget.listRelatorios[index].horasTrabTotais!=null?Text(widget.listRelatorios[index].horasTrabTotais,style: TextStyle(fontWeight: FontWeight.bold)):Text('')
                         ],
                       ),
                       Divider(

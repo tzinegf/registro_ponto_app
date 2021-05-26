@@ -70,7 +70,6 @@ class _ReportsScreenState extends State<ReportMonthScreen> {
 
                   ),
                 ),
-
               ],
             ),
           ],

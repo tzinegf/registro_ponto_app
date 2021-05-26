@@ -2,12 +2,36 @@ import 'package:controle_ponto_app/ui/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AdminPageAuth extends StatelessWidget {
+class AdminPageAuth extends StatefulWidget {
+  @override
+  _AdminPageAuthState createState() => _AdminPageAuthState();
+}
+
+class _AdminPageAuthState extends State<AdminPageAuth> {
   TextEditingController adminAuthController = TextEditingController();
 
   addStringToSF(String s) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('password', s);
+  }
+
+  getValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String stringValue = prefs.getString('password');
+    return stringValue;
+  }
+
+  @override
+  initState() {
+    super.initState();
+    getValuesSF().then((value){
+      if(value != null ) {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => HomeScreen()));
+      }
+    });
+
+
   }
 
   @override

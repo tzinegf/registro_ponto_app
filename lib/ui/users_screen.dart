@@ -30,7 +30,6 @@ class _UsersScreenState extends State<UsersScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     getUsers();
   }
 
@@ -40,6 +39,8 @@ class _UsersScreenState extends State<UsersScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Funcionários'),
@@ -111,6 +112,7 @@ class _UsersScreenState extends State<UsersScreen> {
                     nome: usersFilter[index].nome,
                     status: usersFilter[index].ativo),
                 onTap: () {
+                  Navigator.pop(context);
                   Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => EditFuncScreen(user: allUsers[index],)));

@@ -3,6 +3,7 @@ import 'package:controle_ponto_app/components/text_field_widget.dart';
 import 'package:controle_ponto_app/components/timer_widget.dart';
 import 'package:controle_ponto_app/models/user_model.dart';
 import 'package:controle_ponto_app/providers/db_provider.dart';
+import 'package:controle_ponto_app/ui/users_screen.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter/material.dart';
 class EditFuncScreen extends StatefulWidget {
@@ -41,8 +42,8 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
 
 
   var cpfMask = new MaskedTextController(mask: '000.000.000-00');
-  var phoneMask = new MaskedTextController(mask: '(000) 00000-0000');
-  var phoneMask2 = new MaskedTextController(mask: '(000) 00000-0000');
+  var phoneMask = new MaskedTextController(mask: '(00) 00000-0000');
+  var phoneMask2 = new MaskedTextController(mask: '(00) 00000-0000');
 
 
   TimeOfDay convertTime(String time) {
@@ -96,6 +97,7 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
               icon: Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.pop(context);
+                Navigator.push(context,MaterialPageRoute(builder: (context) => UsersScreen()));
               }),
           actions: [
             IconButton(
@@ -339,6 +341,8 @@ class _EditFuncScreenState extends State<EditFuncScreen> {
                                       )
                                       .then((code) {
                                     if (code.toString() == 'ok') {
+                                      Navigator.pop(context);
+                                      Navigator.push(context,MaterialPageRoute(builder: (context) => UsersScreen()));
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
                                         content: Text(

@@ -1,24 +1,41 @@
 import 'package:controle_ponto_app/ui/admin_page_auth.dart';
 import 'package:controle_ponto_app/ui/home_screen.dart';
+import 'package:controle_ponto_app/ui/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(MyApp());
-
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+
+
   getValuesSF() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String stringValue = prefs.getString('password');
     return stringValue;
   }
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate
@@ -58,18 +75,32 @@ class MyApp extends StatelessWidget {
           ),
 
         ),
-        home: FutureBuilder(
-            future: getValuesSF(),
-            builder: (context, asyncSnapshot) {
-              if (!asyncSnapshot.hasData) {
-                return AdminPageAuth();
-              } else {
-                return HomeScreen();
-              }
-            })
+        home: SplashScreen()
         //home: CadastroFuncScreen(),
         //home: HomeScreen(),
 
         );
   }
+
+/*
+  FutureBuilder _buildFutureBuilder() {
+    return FutureBuilder(
+        future: getValuesSF(),
+        builder: (context, asyncSnapshot) {
+
+         Future.delayed(Duration(seconds: 5)).then((_) {
+          if (!asyncSnapshot.hasData) {
+            return AdminPageAuth();
+          } else {
+            return HomeScreen();
+          }
+          });
+         return SplashScreen();
+
+        });
+  }*/
+
+
 }
+
+

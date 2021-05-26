@@ -20,6 +20,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
   List<Relatorio> relatorios;
   TextEditingController controller = new TextEditingController();
   String _initialDate = DateFormat("y'-'MM'-'d", "pt_BR").format(DateTime.now());
+  String initialDate = DateFormat("d'-'MM'-'yyyy", "pt_BR").format(DateTime.now());
 
 
   void getReports(String data ) {
@@ -34,8 +35,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
     super.initState();
     // TODO: implement initState
     getReports(_initialDate);
-    controller.text =_initialDate;
-
+    controller.text = initialDate;
   }
 
   /*
@@ -79,27 +79,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       style: Theme.of(context).textTheme.headline6)),
             ),
             Column(
-              children: [/*
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: TextField(
-                    textAlign: TextAlign.center,
-                    decoration: InputDecoration(
-                        hintText: 'Entre com um nome',
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                        )),
-                    onChanged: (value) {
-                      setState(() {
-                        usersFilter = allUsers
-                            .where((u) => (u.nome
-                            .toLowerCase()
-                            .contains(value.toLowerCase())))
-                            .toList();
-                      });
-                    },
-                  ),
-                ),*/
+              children: [
                 DateWidget(date: DateTime.now(), controller: controller,getReports:getReports),
                 SingleChildScrollView(
 

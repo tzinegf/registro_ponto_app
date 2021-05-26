@@ -22,6 +22,42 @@ class _MonthWidgetState extends State<MonthWidget> {
     }
     return '';
   }
+
+  int sumHoras=0;
+
+  int convertTime(String time) {
+    if(time !=null){
+      int hora = int.parse(time.substring(0, 2));
+      int minut = int.parse(time.substring(3, 5));
+      int seconds =int.parse(time.substring(6,8));
+      int n= Duration(hours: hora!=null?hora:00,minutes:minut ,seconds: seconds).inMilliseconds;
+      return n;
+    }
+    return 0;
+
+
+  }
+
+  void getSum(){
+
+    for(int i=0;i<widget.listRelatoriosMonth.length;i++){
+
+      sumHoras = sumHoras+ convertTime(widget.listRelatoriosMonth[i].horasTrabTotais);
+    }
+  }
+
+  @override
+  void initState() {
+    getSum();
+  }
+
+  String  formatTime(int time){
+    format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
+    final d3 = Duration(milliseconds: time);
+    return format(d3);
+  }
+
+
   String  date(String data){
     if(data!= null){
       final f = new DateFormat('dd:MM:yyyy');
@@ -31,9 +67,9 @@ class _MonthWidgetState extends State<MonthWidget> {
     return '';
   }
 
+
   @override
   Widget build(BuildContext context) {
-    print(widget.listRelatoriosMonth);
 
     return  Container(
       child: Column(
@@ -45,6 +81,7 @@ class _MonthWidgetState extends State<MonthWidget> {
               itemCount: widget.listRelatoriosMonth.length,
               itemBuilder: (context, index) {
                 if (widget.listRelatoriosMonth.isNotEmpty && widget.listRelatoriosMonth !=null) {
+
                   return Container(
                     padding: EdgeInsets.only(top: 10,left: 20,right: 20,bottom: 10) ,
                     child: Column(
@@ -128,7 +165,7 @@ class _MonthWidgetState extends State<MonthWidget> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Total'),
-                            Text(widget.listRelatoriosMonth[index].horasTrabTotais)
+                            widget.listRelatoriosMonth[index].horasTrabTotais!=null?Text(widget.listRelatoriosMonth[index].horasTrabTotais,style: TextStyle(fontWeight: FontWeight.bold)):Text('')
                           ],
                         ),
                         Divider(
@@ -136,16 +173,24 @@ class _MonthWidgetState extends State<MonthWidget> {
                           color: Colors.black45,
                         )
 
+
                       ],
                     ),
                   );
                 } else {
-                  print(widget.listRelatoriosMonth[index]);
                   return Container(
                     child: Center(child: Text('Nada aqui!')),
                   );
                 }
               }),
+          Container(
+            margin: EdgeInsets.all(16),
+            padding: EdgeInsets.all(5),
+            width: double.infinity,
+            decoration: BoxDecoration(border: Border.all(color:Colors.black45)),
+
+            child: Text('Horas totais no mês : ${formatTime(sumHoras)}',style: TextStyle(fontWeight: FontWeight.bold)),)
+
         ],
       ),
     );

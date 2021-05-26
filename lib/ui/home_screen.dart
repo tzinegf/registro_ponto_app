@@ -36,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   initState() {
     super.initState();
+    getValuesSF();
 
   }
 
@@ -132,13 +133,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: EdgeInsets.only(bottom: 20),
                       child: Text('INFORME O CÓDIGO',
                           style: Theme.of(context).textTheme.headline4)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [TextButton(onPressed: () =>Navigator.pop(context), child: Text('CANCELAR')),
                   TextButton(
                       onPressed: () async {
-                        registerNewPoint(codeBarManual.text,db,_scaffoldKey,context);
 
+                        registerNewPoint(codeBarManual.text,db,_scaffoldKey,context);
+                        codeBarManual.text='';
         },
 
                       child: Text('REGISTRAR'))
+                ])
                 ],
               ),
             ),
@@ -172,9 +178,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: TextField(
                       controller: userAuthController,
                       textAlign: TextAlign.center,
+                      obscureText: true,
                       decoration: InputDecoration(
+
                           border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
+
                       )),
                     ),
                   ),
@@ -184,53 +193,56 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: Theme.of(context).textTheme.headline4)),
                   Padding(
                       padding: EdgeInsets.only(bottom: 5),
-                      child: Text(_information,
-                          style: Theme.of(context).textTheme.headline4)),
-                  TextButton(
-                      onPressed: () async {
-                        String password = await getValuesSF();
+                      child: Text(_information, style: Theme.of(context).textTheme.headline4)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [TextButton(onPressed: () =>Navigator.pop(context), child: Text('CANCELAR')),
+                      TextButton(
+                          onPressed: () async {
+                            String password = await getValuesSF();
 
-                        if (userAuthController.text == password) {
-                          _information = '';
-                          userAuthController.clear();
-                          Navigator.pop(context);
-                          if (n == 1) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        CadastroFuncScreen()));
-                          } else if (n == 2) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => UsersScreen()));
-                          } else if (n == 3) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ReportsScreen()));
-                          }
-                          else if (n == 4) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ReportsMonthScreen()));
-                          }
-                        } else {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                    content: Text(
-                                  'Senha icorreta!',
-                                  style: Theme.of(context).textTheme.headline4,
-                                  textAlign: TextAlign.center,
-                                ));
-                              });
-                        }
-                      },
-                      child: Text('ENTRAR'))
+                            if (userAuthController.text == password) {
+                              _information = '';
+                              userAuthController.clear();
+                              Navigator.pop(context);
+                              if (n == 1) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CadastroFuncScreen()));
+                              } else if (n == 2) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => UsersScreen()));
+                              } else if (n == 3) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ReportsScreen()));
+                              }
+                              else if (n == 4) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ReportsMonthScreen()));
+                              }
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                        content: Text(
+                                          'Senha icorreta!',
+                                          style: Theme.of(context).textTheme.headline4,
+                                          textAlign: TextAlign.center,
+                                        ));
+                                  });
+                            }
+                          },
+                          child: Text('ENTRAR'))],
+                  )
                 ],
               ),
             ),
@@ -320,7 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontSize: 20, color: Colors.white),
                   textAlign: TextAlign.center),
               onTap: () {
-                //Navigator.pop(context);
+                Navigator.pop(context);
                 _userAuthDialog(1);
               },
             ),
@@ -329,6 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontSize: 20, color: Colors.white),
                   textAlign: TextAlign.center),
               onTap: () {
+                Navigator.pop(context);
                 _userAuthDialog(2);
                 // ...
               },
@@ -338,6 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontSize: 20, color: Colors.white),
                   textAlign: TextAlign.center),
               onTap: () {
+                Navigator.pop(context);
                 _userAuthDialog(3);
               },
             ),
@@ -346,20 +360,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontSize: 20, color: Colors.white),
                   textAlign: TextAlign.center),
               onTap: () {
+                Navigator.pop(context);
                 _userAuthDialog(4);
               },
             ),
-            Padding(
-                padding: EdgeInsets.only(top: 300),
-                child: ListTile(
-                  title: Text('Sair',
-                      style: TextStyle(fontSize: 20, color: Colors.white),
-                      textAlign: TextAlign.center),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
-                  },
-                ))
           ],
         ),
       )),
@@ -370,16 +374,19 @@ void registerNewPoint(String codebar, DbProvider db,GlobalKey<ScaffoldState> _sc
 
   if(codebar!=null && codebar.length == 10 ){
     DateTime data = DateTime.now();
-    var formatter = new DateFormat("yyyy-MM-dd hh:mm:ss");
+    var formatter = new DateFormat("yyyy-MM-dd kk:mm:ss");
+    var _formatter = new DateFormat("kk:mm:ss");
     String formatted = formatter.format(data);
-    int _count = await db.getCountSF(codebar);
+    String _formatted = _formatter.format(data);
+    int _count =  await db.getCountSF(codebar);
 
-    if (_count == null || _count == 0 ) {
+
+  if (_count == null || _count == 0 ) {
       db.sendRegister(codebar, formatted, "hora_ini_expediente", 0, formatted).then((value)async{
         if(value.toString() == '1'){
           ScaffoldMessenger.of(_scaffoldKey.currentContext)
               .showSnackBar(SnackBar(
-            content: Text('Ponto registrado!',
+            content: Text('Ponto registrado as ${_formatted}!',
                 textAlign: TextAlign.center,
                 style: Theme.of(_scaffoldKey.currentContext)
                     .textTheme
@@ -404,7 +411,7 @@ void registerNewPoint(String codebar, DbProvider db,GlobalKey<ScaffoldState> _sc
         if(value.toString() == '2'){
           ScaffoldMessenger.of(_scaffoldKey.currentContext)
               .showSnackBar(SnackBar(
-            content: Text('Ponto registrado!',
+            content: Text('Ponto registrado as ${_formatted}!',
                 textAlign: TextAlign.center,
                 style: Theme.of(_scaffoldKey.currentContext)
                     .textTheme
@@ -430,7 +437,7 @@ void registerNewPoint(String codebar, DbProvider db,GlobalKey<ScaffoldState> _sc
         if(value.toString() == '3'){
           ScaffoldMessenger.of(_scaffoldKey.currentContext)
               .showSnackBar(SnackBar(
-            content: Text('Ponto registrado!',
+            content: Text('Ponto registrado as ${_formatted}!',
                 textAlign: TextAlign.center,
                 style: Theme.of(_scaffoldKey.currentContext)
                     .textTheme
@@ -453,10 +460,9 @@ void registerNewPoint(String codebar, DbProvider db,GlobalKey<ScaffoldState> _sc
     } else if (_count == 3) {
       db.sendRegister(codebar, formatted, "hora_fim_expediente", 3, formatted).then((value)async{
         if(value.toString() == '4'){
-          print('$_count teste');
           ScaffoldMessenger.of(_scaffoldKey.currentContext)
               .showSnackBar(SnackBar(
-            content: Text('Ponto registrado!',
+            content: Text('Ponto registrado as ${_formatted}!',
                 textAlign: TextAlign.center,
                 style: Theme.of(_scaffoldKey.currentContext)
                     .textTheme

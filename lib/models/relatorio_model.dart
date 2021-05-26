@@ -3,9 +3,8 @@ class Relatorio {
 
   String nome;
   int user_id ;
-  int
-  usuarioAtivo;
- String existeRegistroPonto;
+  int usuarioAtivo;
+  int existeRegistroPonto;
   String hora_ini;
   String hora_saida_intervalo;
   String hora_retorno_intervalo;
