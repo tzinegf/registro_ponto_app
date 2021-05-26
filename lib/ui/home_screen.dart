@@ -32,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return stringValue;
   }
 
-
   @override
   initState() {
     super.initState();

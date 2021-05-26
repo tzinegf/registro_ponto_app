@@ -26,11 +26,14 @@ class _MonthWidgetState extends State<MonthWidget> {
   int sumHoras=0;
 
   int convertTime(String time) {
+    print(time);
     if(time !=null){
       int hora = int.parse(time.substring(0, 2));
       int minut = int.parse(time.substring(3, 5));
+
       int seconds =int.parse(time.substring(6,8));
-      int n= Duration(hours: hora!=null?hora:00,minutes:minut ,seconds: seconds).inMilliseconds;
+      print('$hora,$minut,$seconds');
+      int n= Duration(hours: hora,minutes:minut ,seconds: seconds).inMilliseconds;
       return n;
     }
     return 0;
@@ -103,7 +106,7 @@ class _MonthWidgetState extends State<MonthWidget> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Entrada'),
+                            Text('Entrada(1º turno)'),
                             Text( dateTime(widget.listRelatoriosMonth[index].hora_ini)),
 
                           ],
@@ -111,21 +114,21 @@ class _MonthWidgetState extends State<MonthWidget> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Saida'),
+                            Text('Saida(1º turno)'),
                             Text( dateTime(widget.listRelatoriosMonth[index].hora_saida_intervalo)),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Entrada'),
+                            Text('Entrada(2º turno)'),
                             Text(dateTime(widget.listRelatoriosMonth[index].hora_retorno_intervalo))
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Saida'),
+                            Text('Saida(º turno)'),
                             Text(dateTime(widget.listRelatoriosMonth[index].hora_saida))
                           ],
                         ),

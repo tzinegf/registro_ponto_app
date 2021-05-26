@@ -73,7 +73,7 @@ class _ReportWidgetState extends State<ReportWidget> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Entrada'),
+                          Text('Entrada (1º turno)'),
                           Text( dateTime(widget.listRelatorios[index].hora_ini)),
 
                         ],
@@ -81,21 +81,21 @@ class _ReportWidgetState extends State<ReportWidget> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Saida'),
+                          Text('Saida (1º turno)'),
                           Text( dateTime(widget.listRelatorios[index].hora_saida_intervalo)),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Entrada'),
+                          Text('Entrada (2º turno)'),
                           Text(dateTime(widget.listRelatorios[index].hora_retorno_intervalo))
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Saida'),
+                          Text('Saida (2º turno)'),
                           Text(dateTime(widget.listRelatorios[index].hora_saida))
                         ],
                       ),
