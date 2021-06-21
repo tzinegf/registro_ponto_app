@@ -2,15 +2,30 @@
 
 Aplicativo para controle de ponto eletrônico
 
-## Getting Started
+## Descrição do App
 
-This project is a starting point for a Flutter application.
+Projeto criado para efetuar o controle de ponto eletrônico via leitura de QRCode.
 
-A few resources to get you started if this is your first Flutter project:
+## Funcionalidades do App
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+# Ler código do funcionário.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+O app efetua a leitura do código do funcionário, através de um dispositivo que possua câmera e permita a leitura do mesmo. 
+. Caso o dispositivo não possua recursos para efetuar a leitura do código, esse deve ser informado manualmente.
+
+# Cadastro de funcionários
+
+O app permite que seja efetuado o cadastro de funcionários com os dados requeridos e bem como seu código gerado de forma automática.
+O app permite a edição dos dados após o cadastro.
+. O código não pode ser alterado.
+O app permite listagem dos funcionários cadastrados
+.  Essa listagem é  ordenada  de A-Z ou de acordo com o status do funcionário 
+. O app permite a busca dos funcionários cadastrados
+(ATIVADO/DESATIVADO).
+O app permite marcar como desativado um funcionário.
+O app exibe relatórios contendo todos os registros diários dos funcionários
+O app exibe relatórios contendo todos os registros mensais dos funcionários
+
+
+
+
